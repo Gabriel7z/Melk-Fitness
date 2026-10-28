@@ -2,9 +2,9 @@
 
 Plano de academia para definir o corpo sem perder o peito: glúteo e coxa maiores, barriga mais chapada, comida e treino no mesmo lugar.
 
-O ponto de partida é Amanda, 1,70 m e 65 kg. A última bioimpedância, de 25 de setembro de 2026, mediu 65,95 kg, 31,1% de gordura e músculo esquelético em 36,9%. A proteína da ficha veio baixa. O plano troca gordura por músculo sem subir o peso. Os treinos Melk são quatro dias de força, mais um sábado opcional de postura e caminhada.
+O plano troca gordura por músculo sem subir o peso. Os treinos são quatro dias de força, mais um sábado opcional de postura e caminhada.
 
-Não tem treino de peito. Supino, inclinado e flexão ficaram de fora. O peito se segura com o peso perto de 65 kg e a proteína, não com um dia de peitoral.
+Não tem treino de peito. Supino, inclinado e flexão ficaram de fora. O peito se segura com o peso estável e a proteína, não com um dia de peitoral.
 
 Os dados ficam no celular, neste navegador. Não tem conta nem servidor.
 
