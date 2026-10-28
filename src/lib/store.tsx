@@ -12,6 +12,7 @@ import type {
   Store,
   WeeklyWeighIn,
 } from "@/lib/types";
+import { clearMonthPhotos } from "@/lib/photos";
 
 const PROFILE_KEY = "melk.profile.v2";
 const CHECKINS_KEY = "melk.checkins.v2";
@@ -424,6 +425,7 @@ export function resetStore() {
     localStorage.removeItem(HABITS_KEY);
     localStorage.removeItem(WEEKS_KEY);
     localStorage.removeItem(MONTHS_KEY);
+    void clearMonthPhotos();
   }
   emit();
 }

@@ -14,9 +14,11 @@ import {
   monthOf,
   openMonth,
   recentMonths,
+  shiftMonth,
   weeksInMonth,
 } from "@/lib/rhythm";
 import { saveMonthReview, useStore } from "@/lib/store";
+import { MonthPhotos } from "@/components/month-photos";
 import { useToday } from "@/lib/use-today";
 import type { Energy, Hunger, MonthlyReview } from "@/lib/types";
 import { cn } from "cn";
@@ -84,8 +86,8 @@ export function MonthReviewCard({ quiet = false }: { quiet?: boolean }) {
     if (!latest) {
       return (
         <p className="mt-4 text-sm text-muted-foreground">
-          A avaliação do mês abre na última semana, com a fita: cintura,
-          quadril, coxa e peito.
+          A avaliação do mês abre na última semana, com a fita e a foto de
+          frente e de lado.
         </p>
       );
     }
@@ -162,8 +164,8 @@ export function MonthReviewCard({ quiet = false }: { quiet?: boolean }) {
         {titleMonth(selected)}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        Uma vez no mês, de manhã, com a mesma fita. A balança deste mês são as
-        segundas. A fita diz se a barriga desceu sem o peito sumir.
+        Uma vez no mês, de manhã. A balança deste mês são as segundas. A fita
+        e a foto, no mesmo lugar, dizem se a barriga desceu sem o peito sumir.
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
@@ -207,6 +209,8 @@ export function MonthReviewCard({ quiet = false }: { quiet?: boolean }) {
           );
         })}
       </ul>
+
+      <MonthPhotos month={selected} previous={shiftMonth(selected, -1)} />
 
       <form
         className="mt-4 grid gap-4"

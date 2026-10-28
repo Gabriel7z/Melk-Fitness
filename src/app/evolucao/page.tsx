@@ -100,8 +100,8 @@ export default function EvolucaoPage() {
           eyebrow="Evolução"
           title="A fita conta mais que a balança."
         >
-          O peso entra toda segunda, uma vez. No fim do mês, a fita: cintura,
-          quadril, coxa e peito, de manhã, na mesma luz.
+          O peso entra toda segunda, uma vez. No fim do mês, a fita e a foto de
+          frente e de lado, de manhã, na mesma luz.
         </PageHeader>
         <div className="h-40 animate-pulse rounded-3xl bg-card ring-1 ring-foreground/10" />
       </div>
@@ -114,8 +114,8 @@ export default function EvolucaoPage() {
         eyebrow="Evolução"
         title="A fita conta mais que a balança."
       >
-        O peso entra toda segunda, uma vez. No fim do mês, a fita: cintura,
-        quadril, coxa e peito, de manhã, na mesma luz.
+        O peso entra toda segunda, uma vez. No fim do mês, a fita e a foto de
+        frente e de lado, de manhã, na mesma luz.
       </PageHeader>
       <WeekWeightCard />
       <MonthReviewCard />
@@ -279,7 +279,7 @@ export default function EvolucaoPage() {
             onClick={() => {
               if (
                 window.confirm(
-                  "Apagar o peso das segundas, as avaliações do mês, as medidas e os treinos salvos neste celular?",
+                  "Apagar o peso das segundas, as avaliações do mês, as fotos, as medidas e os treinos salvos neste celular?",
                 )
               ) {
                 resetStore();
