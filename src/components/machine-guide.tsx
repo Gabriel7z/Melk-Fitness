@@ -2,6 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { guideFor, GUIDES, type MachineGuide } from "@/lib/machines";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+function photoSrc(path: string) {
+  if (!path || !basePath || path.startsWith(basePath)) return path;
+  return `${basePath}${path}`;
+}
+
 export function MachineGuideCard({ exerciseId }: { exerciseId: string }) {
   const guide = guideFor(exerciseId);
   if (!guide) return null;
@@ -9,7 +16,7 @@ export function MachineGuideCard({ exerciseId }: { exerciseId: string }) {
     <div className="mt-4">
       {guide.photo ? (
         <Image
-          src={guide.photo}
+          src={photoSrc(guide.photo)}
           alt={guide.alt}
           width={1280}
           height={960}
@@ -83,7 +90,7 @@ function MachineThumb({ guide }: { guide: MachineGuide }) {
     >
       {guide.photo ? (
         <Image
-          src={guide.photo}
+          src={photoSrc(guide.photo)}
           alt={guide.alt}
           width={640}
           height={480}

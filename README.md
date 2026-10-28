@@ -8,6 +8,8 @@ Não tem treino de peito. Supino, inclinado e flexão ficaram de fora. O peito s
 
 Os dados ficam no celular, neste navegador. Não tem conta nem servidor.
 
+O site publicado fica em [gabriel7z.github.io/Melk-Fitness](https://gabriel7z.github.io/Melk-Fitness/).
+
 ## Como rodar
 
 ```bash
