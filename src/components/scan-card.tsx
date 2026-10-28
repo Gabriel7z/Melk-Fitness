@@ -31,8 +31,9 @@ export function ScanCard({ compact = false }: { compact?: boolean }) {
           1,70 m, IMC {formatNumber(BODY_SCAN.bmi, 1)}. Gordura alta. Músculo
           esquelético {formatNumber(BODY_SCAN.skeletalMusclePercent, 1)}%, já
           excelente. Proteína da ficha,{" "}
-          {formatNumber(BODY_SCAN.proteinPercent, 1)}%, veio baixa. A meta de
-          hoje é o peso parado e a gordura descendo.
+          {formatNumber(BODY_SCAN.proteinPercent, 1)}%, veio baixa. A meta é
+          recomposição corporal: peso parado, gordura descendo, músculo no
+          glúteo e na coxa.
         </p>
       </Link>
     );

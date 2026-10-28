@@ -34,7 +34,7 @@ export default function PratoPage() {
   return (
     <div>
       <PageHeader eyebrow="Alimentação" title="Você vai comer.">
-        Sem superávit: o peso não sobe. A ficha marcou a proteína como baixa,
+        A comida serve a recomposição corporal. Sem superávit: o peso não sobe. A ficha marcou a proteína como baixa,
         então ela fica alta aqui para o músculo entrar no lugar da gordura. O
         carboidrato do dia de treino segura o glúteo e o peito.
       </PageHeader>

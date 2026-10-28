@@ -108,13 +108,17 @@ export default function HomePage() {
           aria-hidden
         />
         <p className="relative text-xs font-semibold tracking-[0.18em] uppercase">
-          {today ? formatLongDate(today.key) : "Seu painel"}
+          Meta · recomposição corporal
         </p>
         <h1 className="font-heading relative mt-2 text-4xl leading-tight font-extrabold md:text-5xl">
           {name ? `Oi, ${name}` : "Oi"}
         </h1>
         <p className="relative mt-3 max-w-xl text-lg leading-snug font-semibold">
-          Manter 65 kg, reduzir gordura e ganhar glúteo/coxa.
+          O peso fica perto de 65 kg. A gordura desce. Glúteo e coxa sobem. O
+          peito fica.
+        </p>
+        <p className="relative mt-2 text-sm text-primary-foreground/80">
+          {today ? formatLongDate(today.key) : "Sem dieta de emagrecer."}
         </p>
         <p className="relative mt-4 inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-semibold">
           Avaliação de {BODY_SCAN.dateLabel}
@@ -142,7 +146,7 @@ export default function HomePage() {
           icon={Scale}
           label="Peso"
           value={formatWeight(profile.weightKg)}
-          hint="Perto de 65 kg"
+          hint="Recomposição, 63 a 65 kg"
           tone="rose"
           delay="40ms"
         />
@@ -205,7 +209,7 @@ export default function HomePage() {
           Objetivos
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          O foco é glúteo e coxa. A barriga desce com a gordura. O peito fica.
+          Uma meta só: recomposição corporal. A forma muda. A balança não vai para 60 kg.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {GOALS.map((goal, index) => (

@@ -106,7 +106,7 @@ export function assess(profile: Profile): Assessment | null {
     mode = "recomp";
     goalLow = weightKg - 2;
     goalHigh = weightKg;
-    headline = "O peso fica. A gordura sai.";
+    headline = "Recomposição corporal. O peso fica, a gordura sai.";
     detail = `A avaliação de ${scan.dateLabel} mediu ${formatNumber(scan.fatPercent, 1)}% de gordura (${formatNumber(scan.fatKg, 1)} kg) em ${formatNumber(scan.weightKg, 2)} kg. O IMC de hoje, ${imc}, está na faixa saudável. O que a balança chamou de “levemente acima” é a gordura, marcada como alta. O músculo esquelético já veio excelente: ${formatNumber(scan.skeletalMusclePercent, 1)}%, ${formatNumber(scan.skeletalMuscleKg, 1)} kg. A proteína da ficha veio baixa, ${formatNumber(scan.proteinPercent, 1)}%. A balança sugeriu perder ${formatNumber(scan.scaleCutKg, 1)} kg e ir para perto de ${scan.scaleTargetKg} kg. Esse corte levaria peito e glúteo junto. A meta é ficar entre ${formatNumber(goalLow, 1)} e ${formatNumber(goalHigh, 1)} kg, com a gordura caminhando de ${formatNumber(scan.fatPercent, 1)}% para perto de ${scan.fatGoalPercent}%, e mais músculo na coxa e no glúteo. Gordura visceral ${scan.visceralFat} já está numa faixa tranquila.`;
     kcalRaw = tdee - 200;
   } else if (bmi >= 27) {
@@ -165,7 +165,7 @@ export function assess(profile: Profile): Assessment | null {
   const carbs = Math.max(0, Math.round((kcal - protein * 4 - fat * 9) / 4));
   const modeLabel: Record<PlanMode, string> = {
     deficit: "Déficit leve",
-    recomp: "Recomposição",
+    recomp: "Recomposição corporal",
     maintenance: "Manutenção",
     surplus: "Superávit leve",
   };

@@ -35,15 +35,15 @@ export default function PesoPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Peso ideal"
+        eyebrow="A meta dela"
         title={
           usingScan
-            ? "O peso fica. A gordura sai."
+            ? "Recomposição corporal"
             : `${formatWeight(live.weightKg)} não é uma sentença.`
         }
       >
         {usingScan
-          ? `Com 1,70 m, ${formatWeight(live.weightKg)} já é um peso de ficar. A última avaliação, de ${BODY_SCAN.dateLabel}, mostrou gordura alta (${formatNumber(BODY_SCAN.fatPercent, 1)}%) e músculo esquelético já excelente (${formatNumber(BODY_SCAN.skeletalMusclePercent, 1)}%). A proteína da ficha veio baixa. O plano é perder gordura e ganhar massa, com a balança entre ${formatNumber(live.weightKg - 2, 0)} e ${formatNumber(live.weightKg, 0)} kg.`
+          ? `A meta é recomposição: perder gordura e ganhar músculo no glúteo e na coxa, com o peito no lugar. Com 1,70 m, ${formatWeight(live.weightKg)} já é um peso de ficar. A avaliação de ${BODY_SCAN.dateLabel} mostrou gordura alta (${formatNumber(BODY_SCAN.fatPercent, 1)}%) e músculo esquelético excelente (${formatNumber(BODY_SCAN.skeletalMusclePercent, 1)}%). A balança fica entre ${formatNumber(live.weightKg - 2, 0)} e ${formatNumber(live.weightKg, 0)} kg.`
           : "O mesmo peso é definição em uma altura e é ajuste em outra. Para glúteo maior, coxa grossa, barriga chapada e peito no lugar, a faixa importa mais do que um número redondo."}
       </PageHeader>
 
