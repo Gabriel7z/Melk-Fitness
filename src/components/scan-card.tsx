@@ -52,13 +52,13 @@ export function ScanCard({ compact = false }: { compact?: boolean }) {
         partida foi 65 kg. O peso de hoje é o da segunda. Gordura veio alta,
         músculo esquelético excelente, proteína baixa.
       </p>
-      <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {STATS.map(([label, value]) => (
-          <div key={label}>
-            <dt className="text-[11px] tracking-[0.14em] text-muted-foreground uppercase">
+          <div key={label} className="rounded-2xl bg-secondary px-3 py-3">
+            <dt className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
               {label}
             </dt>
-            <dd className="font-heading mt-1 text-xl leading-tight">{value}</dd>
+            <dd className="font-heading mt-1 text-xl leading-tight font-bold">{value}</dd>
           </div>
         ))}
       </dl>

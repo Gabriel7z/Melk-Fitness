@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import Link from "next/link";
 import { weekDates, weekdayLabel, type CivilDate } from "@/lib/dates";
 import { useToday } from "@/lib/use-today";
@@ -41,7 +42,7 @@ export function WeekList({ compact = false }: { compact?: boolean }) {
   const keys = new Set(weekDates(today).map((day) => day.key));
 
   return (
-    <ol className="grid gap-2">
+    <ol className={compact ? "grid gap-3 sm:grid-cols-2" : "grid gap-3"}>
       {weekDates(today).map((day) => {
         const plan = planForWeekday(day.weekday);
         const isToday = day.key === today.key;
@@ -72,19 +73,30 @@ export function WeekList({ compact = false }: { compact?: boolean }) {
                 </span>
               ) : null}
               {done ? (
-                <span className="rounded-full bg-sage-soft px-2 py-0.5 text-[10px] font-medium tracking-wide text-sage uppercase">
+                <span className="inline-flex items-center gap-1 rounded-full bg-sage-soft px-2 py-0.5 text-[10px] font-semibold tracking-wide text-sage uppercase">
+                  <Check className="size-3" aria-hidden />
                   Feito
                 </span>
               ) : null}
               {started ? (
-                <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                <span className="text-[10px] font-semibold tracking-wide text-muted-foreground uppercase">
                   Aberto
                 </span>
               ) : null}
             </div>
-            <p className="font-heading mt-1 text-2xl leading-tight">
-              {isWorkout(plan) ? plan.title : plan.title}
+            <p className="font-heading mt-1 text-2xl leading-tight font-bold">
+              {plan.title}
             </p>
+            {isWorkout(plan) && !done && !started ? (
+              <p className="mt-2 text-xs font-semibold text-muted-foreground">
+                Ainda não
+              </p>
+            ) : null}
+            {!isWorkout(plan) ? (
+              <p className="mt-2 text-xs font-semibold text-muted-foreground">
+                Descanso
+              </p>
+            ) : null}
             {compact ? null : (
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 {plan.summary}
@@ -98,8 +110,9 @@ export function WeekList({ compact = false }: { compact?: boolean }) {
           </div>
         );
         const className = cn(
-          "block rounded-3xl bg-card px-4 py-4 ring-1 ring-foreground/10",
+          "melk-card block px-4 py-4 transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-lg",
           isToday && "ring-2 ring-primary",
+          done && "border-primary/30",
         );
         return (
           <li key={day.key}>

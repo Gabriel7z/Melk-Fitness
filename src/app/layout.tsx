@@ -1,35 +1,35 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Outfit } from "next/font/google";
+import { Nunito, Poppins } from "next/font/google";
 import { AppShell } from "@/components/app-shell";
 import "./globals.css";
 
-const outfit = Outfit({
+const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const fraunces = Fraunces({
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
   variable: "--font-heading",
   display: "swap",
-  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "Melk — treino e prato",
+  title: "Melk Fitness — treino e prato",
   description:
-    "Treinos Melk e alimentação para glúteo e coxa maiores, barriga mais chapada e peito no lugar.",
-  applicationName: "Melk",
+    "Painel pessoal de treino e alimentação para glúteo e coxa maiores, barriga mais chapada e peito no lugar.",
+  applicationName: "Melk Fitness",
   appleWebApp: {
     capable: true,
-    title: "Melk",
+    title: "Melk Fitness",
     statusBarStyle: "default",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#5c2430",
+  themeColor: "#7a3148",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${outfit.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${nunito.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <AppShell>{children}</AppShell>

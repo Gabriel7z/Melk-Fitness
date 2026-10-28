@@ -6,14 +6,14 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Melk — treino e prato",
-    short_name: "Melk",
+    name: "Melk Fitness — treino e prato",
+    short_name: "Melk Fitness",
     description:
       "Treinos e alimentação para glúteo, coxa, barriga definida e peito no lugar.",
     start_url: basePath ? `${basePath}/` : "/",
     display: "standalone",
-    background_color: "#f3ecdf",
-    theme_color: "#5c2430",
+    background_color: "#f8f3f6",
+    theme_color: "#7a3148",
     lang: "pt-BR",
   };
 }
