@@ -16,9 +16,9 @@ export default function TreinoPage() {
   return (
     <div>
       <PageHeader eyebrow="Treinos Melk" title="Quatro dias constroem. O sábado é extra.">
-        Segunda e quinta são de glúteo. Terça e sexta põem coxa e peito no mesmo
-        treino, e na sexta o peito começa descansado. Abdômen entra para firmar,
-        sem exercício que alarga a cintura.
+        Segunda e quinta são de glúteo. Terça e sexta são só de coxa. Não tem
+        supino, inclinado nem flexão. Abdômen entra para firmar, sem exercício
+        que alarga a cintura.
       </PageHeader>
 
       <p className="text-sm text-muted-foreground">

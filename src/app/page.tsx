@@ -31,7 +31,7 @@ const GOALS = [
   },
   {
     title: "Peito no lugar",
-    text: "Supino e inclinado duas vezes na semana, com proteína alta.",
+    text: "Sem supino. O peito fica com o peso perto de 65 kg e a proteína no prato.",
   },
 ];
 

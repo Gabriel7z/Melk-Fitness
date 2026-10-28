@@ -255,7 +255,7 @@ export function buildInsight(checkins: CheckIn[]) {
   let ending = "Segue o plano por mais duas semanas antes de mudar a comida.";
   if (waist && waist.delta <= -0.5 && chest && chest.delta < -1) {
     ending =
-      "A cintura caiu, mas o peito também. Sobe um pouco o arroz e não pula o supino.";
+      "A cintura caiu, mas o peito também. Sobe um pouco o arroz. O peito some quando a comida aperta.";
   } else if (waist && waist.delta <= -0.5 && hip && hip.delta >= 0) {
     ending =
       "Cintura para baixo e quadril segurando ou subindo: é exatamente o desenho do plano.";
