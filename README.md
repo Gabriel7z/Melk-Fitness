@@ -20,6 +20,8 @@ Abre [http://127.0.0.1:4317](http://127.0.0.1:4317).
 - Semana de treino, com séries, descanso e troca se a máquina estiver ocupada
 - Prato de treino e prato de descanso, em comida de mercado
 - Peso ideal pela altura, com calorias, proteína e água
+- Peso uma vez por semana, na segunda
+- Avaliação mensal com a fita e as segundas do mês
 - Medidas de cintura, quadril, coxa e peito
 
 Isto é um plano geral de recomposição. Não substitui médico, nutricionista nem um profissional de educação física.

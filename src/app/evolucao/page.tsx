@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { PageHeader, SectionTitle } from "@/components/heading";
+import { MonthReviewCard } from "@/components/month-review-card";
 import { ScanCard } from "@/components/scan-card";
+import { WeekWeightCard } from "@/components/week-weight-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -98,9 +100,8 @@ export default function EvolucaoPage() {
           eyebrow="Evolução"
           title="A fita conta mais que a balança."
         >
-          Cintura, quadril, coxa e peito, sempre no mesmo ponto. De manhã, antes
-          de comer, a cada duas semanas. Foto de frente e de lado, na mesma luz,
-          no mesmo dia.
+          O peso entra toda segunda, uma vez. No fim do mês, a fita: cintura,
+          quadril, coxa e peito, de manhã, na mesma luz.
         </PageHeader>
         <div className="h-40 animate-pulse rounded-3xl bg-card ring-1 ring-foreground/10" />
       </div>
@@ -113,10 +114,11 @@ export default function EvolucaoPage() {
         eyebrow="Evolução"
         title="A fita conta mais que a balança."
       >
-        Cintura, quadril, coxa e peito, sempre no mesmo ponto. De manhã, antes
-        de comer, a cada duas semanas. Foto de frente e de lado, na mesma luz,
-        no mesmo dia.
+        O peso entra toda segunda, uma vez. No fim do mês, a fita: cintura,
+        quadril, coxa e peito, de manhã, na mesma luz.
       </PageHeader>
+      <WeekWeightCard />
+      <MonthReviewCard />
       <>
           {insight ? (
             <p className="rounded-3xl bg-sage-soft px-4 py-4 text-sm leading-relaxed text-accent-foreground">
@@ -277,7 +279,7 @@ export default function EvolucaoPage() {
             onClick={() => {
               if (
                 window.confirm(
-                  "Apagar peso, medidas e treinos salvos neste celular?",
+                  "Apagar o peso das segundas, as avaliações do mês, as medidas e os treinos salvos neste celular?",
                 )
               ) {
                 resetStore();

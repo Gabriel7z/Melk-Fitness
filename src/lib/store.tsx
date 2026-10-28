@@ -3,16 +3,22 @@
 import { useSyncExternalStore } from "react";
 import type {
   CheckIn,
+  Energy,
   HabitDay,
+  Hunger,
+  MonthlyReview,
   Profile,
   SessionLog,
   Store,
+  WeeklyWeighIn,
 } from "@/lib/types";
 
 const PROFILE_KEY = "melk.profile.v2";
 const CHECKINS_KEY = "melk.checkins.v2";
 const SESSIONS_KEY = "melk.sessions.v2";
 const HABITS_KEY = "melk.habits.v2";
+const WEEKS_KEY = "melk.weeks.v2";
+const MONTHS_KEY = "melk.months.v2";
 
 export const defaultProfile: Profile = {
   name: "Amanda",
@@ -36,6 +42,8 @@ function defaultStore(): Store {
     checkins: [],
     sessions: [],
     habits: {},
+    weeks: [],
+    months: [],
   };
 }
 
@@ -150,12 +158,70 @@ function sanitizeHabits(value: unknown): Record<string, HabitDay> {
   return habits;
 }
 
+function dateKey(value: unknown) {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+    ? value
+    : null;
+}
+
+function monthKey(value: unknown) {
+  return typeof value === "string" && /^\d{4}-\d{2}$/.test(value) ? value : null;
+}
+
+function sanitizeWeeks(value: unknown): WeeklyWeighIn[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const record = item as Partial<WeeklyWeighIn>;
+    const week = dateKey(record.week);
+    const date = dateKey(record.date);
+    const weightKg = numberOrNull(record.weightKg, 35, 180);
+    if (!week || !date || weightKg == null || typeof record.id !== "string") {
+      return [];
+    }
+    return [{ id: record.id, week, date, weightKg }];
+  });
+}
+
+function sanitizeMonths(value: unknown): MonthlyReview[] {
+  if (!Array.isArray(value)) return [];
+  const energies = new Set<Energy>(["cansada", "normal", "disposta"]);
+  const hungers = new Set<Hunger>(["pouca", "na medida", "demais"]);
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const record = item as Partial<MonthlyReview>;
+    const month = monthKey(record.month);
+    const date = dateKey(record.date);
+    if (!month || !date || typeof record.id !== "string") return [];
+    const energy =
+      record.energy && energies.has(record.energy) ? record.energy : null;
+    const hunger =
+      record.hunger && hungers.has(record.hunger) ? record.hunger : null;
+    return [
+      {
+        id: record.id,
+        month,
+        date,
+        waistCm: numberOrNull(record.waistCm, 40, 160),
+        hipCm: numberOrNull(record.hipCm, 50, 180),
+        thighCm: numberOrNull(record.thighCm, 30, 120),
+        chestCm: numberOrNull(record.chestCm, 50, 160),
+        energy,
+        hunger,
+        note: typeof record.note === "string" ? record.note.slice(0, 280) : "",
+      },
+    ];
+  });
+}
+
 function load() {
   memory = {
     profile: sanitizeProfile(readJson(PROFILE_KEY)),
     checkins: sanitizeCheckins(readJson(CHECKINS_KEY)),
     sessions: sanitizeSessions(readJson(SESSIONS_KEY)),
     habits: sanitizeHabits(readJson(HABITS_KEY)),
+    weeks: sanitizeWeeks(readJson(WEEKS_KEY)),
+    months: sanitizeMonths(readJson(MONTHS_KEY)),
   };
   loaded = true;
 }
@@ -166,6 +232,8 @@ function persist(store: Store) {
     localStorage.setItem(CHECKINS_KEY, JSON.stringify(store.checkins));
     localStorage.setItem(SESSIONS_KEY, JSON.stringify(store.sessions));
     localStorage.setItem(HABITS_KEY, JSON.stringify(store.habits));
+    localStorage.setItem(WEEKS_KEY, JSON.stringify(store.weeks));
+    localStorage.setItem(MONTHS_KEY, JSON.stringify(store.months));
   } catch {
     // O plano continua nesta sessão mesmo se o celular recusar gravar.
   }
@@ -277,6 +345,68 @@ export function saveCheckIn(input: Omit<CheckIn, "id"> & { id?: string }) {
   });
 }
 
+export function saveWeekWeight(input: {
+  week: string;
+  date: string;
+  weightKg: number;
+}) {
+  update((store) => {
+    const existing = store.weeks.find((item) => item.week === input.week);
+    const next: WeeklyWeighIn = {
+      id: existing?.id ?? crypto.randomUUID(),
+      week: input.week,
+      date: input.date,
+      weightKg: input.weightKg,
+    };
+    const weeks = store.weeks.filter((item) => item.week !== input.week);
+    weeks.push(next);
+    weeks.sort((a, b) => b.week.localeCompare(a.week));
+    return {
+      ...store,
+      weeks,
+      profile: { ...store.profile, weightKg: input.weightKg },
+    };
+  });
+}
+
+export function deleteWeekWeight(id: string) {
+  update((store) => ({
+    ...store,
+    weeks: store.weeks.filter((item) => item.id !== id),
+  }));
+}
+
+export function saveMonthReview(
+  input: Omit<MonthlyReview, "id"> & { id?: string },
+) {
+  update((store) => {
+    const existing = store.months.find((item) => item.month === input.month);
+    const next: MonthlyReview = {
+      id: input.id ?? existing?.id ?? crypto.randomUUID(),
+      month: input.month,
+      date: input.date,
+      waistCm: input.waistCm,
+      hipCm: input.hipCm,
+      thighCm: input.thighCm,
+      chestCm: input.chestCm,
+      energy: input.energy,
+      hunger: input.hunger,
+      note: input.note.trim(),
+    };
+    const months = store.months.filter((item) => item.month !== input.month);
+    months.push(next);
+    months.sort((a, b) => b.month.localeCompare(a.month));
+    return { ...store, months };
+  });
+}
+
+export function deleteMonthReview(id: string) {
+  update((store) => ({
+    ...store,
+    months: store.months.filter((item) => item.id !== id),
+  }));
+}
+
 export function deleteCheckIn(id: string) {
   update((store) => ({
     ...store,
@@ -292,6 +422,8 @@ export function resetStore() {
     localStorage.removeItem(CHECKINS_KEY);
     localStorage.removeItem(SESSIONS_KEY);
     localStorage.removeItem(HABITS_KEY);
+    localStorage.removeItem(WEEKS_KEY);
+    localStorage.removeItem(MONTHS_KEY);
   }
   emit();
 }

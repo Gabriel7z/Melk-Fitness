@@ -35,9 +35,36 @@ export type HabitDay = {
   move: boolean;
 };
 
+export type WeeklyWeighIn = {
+  id: string;
+  /** Segunda-feira que abre a semana, AAAA-MM-DD. */
+  week: string;
+  date: string;
+  weightKg: number;
+};
+
+export type Energy = "cansada" | "normal" | "disposta";
+export type Hunger = "pouca" | "na medida" | "demais";
+
+export type MonthlyReview = {
+  id: string;
+  /** AAAA-MM. */
+  month: string;
+  date: string;
+  waistCm: number | null;
+  hipCm: number | null;
+  thighCm: number | null;
+  chestCm: number | null;
+  energy: Energy | null;
+  hunger: Hunger | null;
+  note: string;
+};
+
 export type Store = {
   profile: Profile;
   checkins: CheckIn[];
   sessions: SessionLog[];
   habits: Record<string, HabitDay>;
+  weeks: WeeklyWeighIn[];
+  months: MonthlyReview[];
 };

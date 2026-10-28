@@ -6,7 +6,9 @@ import { PageHeader } from "@/components/heading";
 import { ProfileForm } from "@/components/profile-form";
 import { WeekList, weekProgress } from "@/components/week-list";
 import { assess, proteinGrams, waterMl } from "@/lib/body";
+import { MonthReviewCard } from "@/components/month-review-card";
 import { ScanCard } from "@/components/scan-card";
+import { WeekWeightCard } from "@/components/week-weight-card";
 import { formatLongDate } from "@/lib/dates";
 import { firstName, formatNumber, formatWeight } from "@/lib/format";
 import { setHabit, useStore } from "@/lib/store";
@@ -73,6 +75,9 @@ export default function HomePage() {
       ) : (
         <Today planIsWorkout={isWorkout(plan)} plan={plan} />
       )}
+
+      {today ? <WeekWeightCard history={false} /> : null}
+      {today ? <MonthReviewCard quiet /> : null}
 
       <ScanCard compact />
 
