@@ -104,10 +104,10 @@ export function assess(profile: Profile): Assessment | null {
 
   if (scan && bmi < 27) {
     mode = "recomp";
-    goalLow = weightKg - 2;
-    goalHigh = weightKg;
-    headline = "Recomposição corporal. O peso fica, a gordura sai.";
-    detail = `A avaliação de ${scan.dateLabel} mediu ${formatNumber(scan.fatPercent, 1)}% de gordura (${formatNumber(scan.fatKg, 1)} kg) em ${formatNumber(scan.weightKg, 2)} kg. O IMC de hoje, ${imc}, está na faixa saudável. O que a balança chamou de “levemente acima” é a gordura, marcada como alta. O músculo esquelético já veio excelente: ${formatNumber(scan.skeletalMusclePercent, 1)}%, ${formatNumber(scan.skeletalMuscleKg, 1)} kg. A proteína da ficha veio baixa, ${formatNumber(scan.proteinPercent, 1)}%. A balança sugeriu perder ${formatNumber(scan.scaleCutKg, 1)} kg e ir para perto de ${scan.scaleTargetKg} kg. Esse corte levaria peito e glúteo junto. A meta é ficar entre ${formatNumber(goalLow, 1)} e ${formatNumber(goalHigh, 1)} kg, com a gordura caminhando de ${formatNumber(scan.fatPercent, 1)}% para perto de ${scan.fatGoalPercent}%, e mais músculo na coxa e no glúteo. Gordura visceral ${scan.visceralFat} já está numa faixa tranquila.`;
+    goalLow = scan.scaleGoalLow;
+    goalHigh = scan.scaleGoalHigh;
+    headline = "Recomposição corporal. A gordura sai.";
+    detail = `A avaliação de ${scan.dateLabel} mediu ${formatNumber(scan.fatPercent, 1)}% de gordura (${formatNumber(scan.fatKg, 1)} kg) em ${formatNumber(scan.weightKg, 2)} kg. Hoje a balança está em ${kg} kg, IMC ${imc}, ainda na faixa saudável. O que a ficha chamou de “levemente acima” é a gordura, marcada como alta. A meta é essa gordura descer de ${formatNumber(scan.fatPercent, 1)}% para perto de ${scan.fatGoalPercent}%, com mais músculo na coxa e no glúteo. A balança pode ir, devagar, para a faixa de ${formatNumber(goalLow, 1)} a ${formatNumber(goalHigh, 1)} kg. O músculo esquelético já veio excelente: ${formatNumber(scan.skeletalMusclePercent, 1)}%, ${formatNumber(scan.skeletalMuscleKg, 1)} kg. A proteína da ficha veio baixa, ${formatNumber(scan.proteinPercent, 1)}%. A balança sugeriu perder ${formatNumber(scan.scaleCutKg, 1)} kg e ir para perto de ${scan.scaleTargetKg} kg. Esse corte levaria peito e glúteo junto. Gordura visceral ${scan.visceralFat} já está numa faixa tranquila.`;
     kcalRaw = tdee - 200;
   } else if (bmi >= 27) {
     mode = "deficit";
@@ -156,7 +156,7 @@ export function assess(profile: Profile): Assessment | null {
   const floor = Math.max(1700, protein * 4 + fat * 9 + 130 * 4);
   let kcal = Math.round(kcalRaw);
   let kcalNote = scan
-    ? `Repouso de ${formatNumber(scan.bmr)} kcal medido na bioimpedância em ${scan.dateLabel}. O gasto do treino entra em cima disso.`
+    ? `Repouso de ${formatNumber(scan.bmr)} kcal medido na bioimpedância em ${scan.dateLabel}. O prato fica cerca de 200 kcal abaixo do gasto para a gordura descer, com proteína alta e carboidrato no dia de treino.`
     : "";
   if (kcal < floor) {
     kcal = Math.round(floor);

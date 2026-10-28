@@ -43,7 +43,7 @@ export default function PesoPage() {
         }
       >
         {usingScan
-          ? `A meta é recomposição: perder gordura e ganhar músculo no glúteo e na coxa, com o peito no lugar. Com 1,70 m, ${formatWeight(live.weightKg)} já é um peso de ficar. A avaliação de ${BODY_SCAN.dateLabel} mostrou gordura alta (${formatNumber(BODY_SCAN.fatPercent, 1)}%) e músculo esquelético excelente (${formatNumber(BODY_SCAN.skeletalMusclePercent, 1)}%). A balança fica entre ${formatNumber(live.weightKg - 2, 0)} e ${formatNumber(live.weightKg, 0)} kg.`
+          ? `A meta é perder gordura e ganhar músculo no glúteo e na coxa, com o peito no lugar. Hoje são ${formatWeight(live.weightKg)}. A gordura da avaliação, ${formatNumber(BODY_SCAN.fatPercent, 1)}%, caminha para perto de ${BODY_SCAN.fatGoalPercent}%. A balança pode descer devagar para ${BODY_SCAN.scaleGoalLow} a ${BODY_SCAN.scaleGoalHigh} kg.`
           : "O mesmo peso é definição em uma altura e é ajuste em outra. Para glúteo maior, coxa grossa, barriga chapada e peito no lugar, a faixa importa mais do que um número redondo."}
       </PageHeader>
 
@@ -53,12 +53,14 @@ export default function PesoPage() {
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
           A balança pediu para perder {formatNumber(BODY_SCAN.scaleCutKg, 1)} kg
           e ir para perto de {BODY_SCAN.scaleTargetKg} kg. Isso secaria peito e
-          glúteo junto. O desenho certo é outro: gordura de{" "}
+          glúteo junto. O desenho certo é a gordura sair de{" "}
           {formatNumber(BODY_SCAN.fatPercent, 1)}% para perto de{" "}
-          {BODY_SCAN.fatGoalPercent}%, mais músculo na coxa e no glúteo em cima
-          dos {formatNumber(BODY_SCAN.skeletalMuscleKg, 1)} kg que já estão
-          excelentes, peso quase no mesmo lugar. Se a fita mostrar cintura menor
-          e quadril igual ou maior, está dando certo mesmo com a balança parada.
+          {BODY_SCAN.fatGoalPercent}%, a balança caminhar para{" "}
+          {BODY_SCAN.scaleGoalLow} a {BODY_SCAN.scaleGoalHigh} kg, e mais músculo
+          na coxa e no glúteo em cima dos{" "}
+          {formatNumber(BODY_SCAN.skeletalMuscleKg, 1)} kg que já estão
+          excelentes. Se a fita mostrar cintura menor e quadril igual ou maior,
+          a gordura está saindo.
         </p>
       ) : null}
 

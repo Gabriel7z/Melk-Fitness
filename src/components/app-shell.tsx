@@ -50,7 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           Melk Fitness
         </Link>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Meta: recomposição corporal.
+          Meta: perder gordura e recompor.
         </p>
         <div className="mt-6">
           <WeightPill value={weight} />
@@ -95,7 +95,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               Melk Fitness
             </Link>
             <p className="mt-2 max-w-[16rem] text-sm leading-snug text-muted-foreground">
-              Meta: recomposição corporal.
+              Meta: perder gordura e recompor.
             </p>
           </div>
           <WeightPill value={weight} />

@@ -531,7 +531,7 @@ export const PROGRESS_RULES = [
 export const DONT = [
   "Não faz só abdominal para secar a barriga. Isso não tira gordura do lugar, e oblíquo pesado pode até alargar a cintura.",
   "Não corta o arroz no dia de perna. Glúteo cresce com força e carboidrato.",
-  "Não malha peito. O peito some quando o peso cai rápido, não quando falta supino. A balança fica perto do peso de hoje.",
+  "Não malha peito. O peito some quando o peso cai rápido, não quando falta supino. A gordura sai devagar, com a balança em direção a 64 a 66 kg.",
   "Não treina glúteo todo dia. Ele cresce na folga entre segunda e quinta.",
   "Não desconta a balança no café do dia seguinte. Treino de perna, ciclo e creatina sobem o peso sem ser gordura.",
   "Não faz dois treinos de perna no mesmo dia para compensar falta. Repõe um treino perdido no sábado e segue.",

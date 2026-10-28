@@ -26,6 +26,9 @@ export const BODY_SCAN = {
   scaleCutKg: 5.9,
   scaleTargetKg: 60,
   fatGoalPercent: 26,
+  /** Faixa da balança enquanto a gordura desce. Não é o corte para 60 kg. */
+  scaleGoalLow: 64,
+  scaleGoalHigh: 66,
   reading: "Levemente acima do peso",
 } as const;
 

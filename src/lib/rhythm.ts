@@ -117,7 +117,7 @@ export function buildMonthReading(
       );
     } else {
       bits.push(
-        `O peso ficou, de ${formatWeight(first)} para ${formatWeight(last)}. A balança quase parada é o desenho da recomposição.`,
+        `O peso ficou, de ${formatWeight(first)} para ${formatWeight(last)}. A meta inclui perder gordura: a fita confirma se a cintura desceu e a coxa ficou.`,
       );
     }
   }

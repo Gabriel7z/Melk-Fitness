@@ -48,8 +48,9 @@ const GOALS: {
   },
   {
     title: "Barriga mais chapada",
-    text: "A gordura, os 31%, é que sai. A balança fica perto do peso de hoje.",
+    text: `A gordura sai, de ${formatNumber(BODY_SCAN.fatPercent, 1)}% para perto de ${BODY_SCAN.fatGoalPercent}%. A balança pode descer devagar para ${BODY_SCAN.scaleGoalLow} a ${BODY_SCAN.scaleGoalHigh} kg.`,
     icon: Flame,
+    focus: true,
   },
   {
     title: "Peito no lugar",
@@ -114,8 +115,9 @@ export default function HomePage() {
           {name ? `Oi, ${name}` : "Oi"}
         </h1>
         <p className="relative mt-3 max-w-xl text-lg leading-snug font-semibold">
-          Hoje são {formatWeight(profile.weightKg)}. A gordura desce. Glúteo e
-          coxa sobem. O peito fica.
+          Hoje são {formatWeight(profile.weightKg)}. A gordura desce, de{" "}
+          {formatNumber(BODY_SCAN.fatPercent, 1)}% para perto de{" "}
+          {BODY_SCAN.fatGoalPercent}%. Glúteo e coxa sobem. O peito fica.
         </p>
         <p className="relative mt-2 text-sm text-primary-foreground/80">
           {today ? formatLongDate(today.key) : "Sem dieta de emagrecer."}
@@ -148,7 +150,7 @@ export default function HomePage() {
           value={formatWeight(profile.weightKg)}
           hint={
             assessment
-              ? `Recomposição, ${formatNumber(assessment.goalLow, 0)} a ${formatNumber(assessment.goalHigh, 0)} kg`
+              ? `Perder gordura, ${formatNumber(assessment.goalLow, 0)} a ${formatNumber(assessment.goalHigh, 0)} kg`
               : "Peso de hoje"
           }
           tone="rose"
@@ -213,7 +215,7 @@ export default function HomePage() {
           Objetivos
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          Uma meta só: recomposição corporal. A forma muda. A balança não vai para 60 kg.
+          Recomposição com perda de gordura. A barriga desce, glúteo e coxa sobem, o peito fica. A balança mira {BODY_SCAN.scaleGoalLow} a {BODY_SCAN.scaleGoalHigh} kg.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {GOALS.map((goal, index) => (

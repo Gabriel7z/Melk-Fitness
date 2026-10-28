@@ -32,8 +32,8 @@ export function ScanCard({ compact = false }: { compact?: boolean }) {
           esquelético {formatNumber(BODY_SCAN.skeletalMusclePercent, 1)}%, já
           excelente. Proteína da ficha,{" "}
           {formatNumber(BODY_SCAN.proteinPercent, 1)}%, veio baixa. A meta é
-          recomposição corporal: peso parado, gordura descendo, músculo no
-          glúteo e na coxa.
+          perder gordura, de {formatNumber(BODY_SCAN.fatPercent, 1)}% para perto
+          de {BODY_SCAN.fatGoalPercent}%, e ganhar glúteo e coxa.
         </p>
       </Link>
     );
