@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { MachineGuideCard } from "@/components/machine-guide";
 import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,7 +52,13 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
   const todayDate = useToday();
   const today = todayDate?.key ?? "";
   const session = sessionFor(sessions, today, day.id);
-  const [index, setIndex] = useState(0);
+  const params = useSearchParams();
+  const selected = params.get("ex");
+  const queryIndex = selected
+    ? day.exercises.findIndex((item) => item.id === selected)
+    : -1;
+  const [picked, setPicked] = useState<number | null>(null);
+  const index = picked ?? (queryIndex >= 0 ? queryIndex : 0);
   const [restUntil, setRestUntil] = useState<number | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const vibrated = useRef(false);
@@ -110,18 +118,18 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
     });
   }
 
-  function toggleSet(setIndex: number) {
+  function toggleSet(setNumber: number) {
     const latest = sessionFor(getStore().sessions, today, day.id);
     const latestDone = latest?.done ?? {};
     const currentSets = readSets(exercise, latestDone);
     const nextSets = currentSets.map((on, cursor) =>
-      cursor === setIndex ? !on : on,
+      cursor === setNumber ? !on : on,
     );
     persist(
       { ...latestDone, [exercise.id]: nextSets },
       latest?.loads ?? {},
     );
-    if (!currentSets[setIndex] && exercise.restSec > 0) {
+    if (!currentSets[setNumber] && exercise.restSec > 0) {
       setRestUntil(restDeadline(exercise.restSec));
     }
   }
@@ -176,7 +184,7 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
             <button
               key={item.id}
               type="button"
-              onClick={() => setIndex(cursor)}
+              onClick={() => setPicked(cursor)}
               className={cn(
                 "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium",
                 cursor === index
@@ -209,6 +217,8 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
           </p>
         </div>
 
+        <MachineGuideCard exerciseId={exercise.id} />
+
         <p className="mt-4 text-base leading-relaxed">{exercise.cue}</p>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           Evita: {exercise.avoid}
@@ -239,12 +249,12 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {sets.map((on, setIndex) => (
+          {sets.map((on, setNumber) => (
             <button
-              key={`${exercise.id}-${setIndex}`}
+              key={`${exercise.id}-${setNumber}`}
               type="button"
               aria-pressed={on}
-              onClick={() => toggleSet(setIndex)}
+              onClick={() => toggleSet(setNumber)}
               className={cn(
                 "h-16 rounded-2xl border text-sm font-medium",
                 on
@@ -252,7 +262,7 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
                   : "border-border bg-background",
               )}
             >
-              Série {setIndex + 1}
+              Série {setNumber + 1}
             </button>
           ))}
         </div>
@@ -297,7 +307,9 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
             variant="outline"
             className="h-11 flex-1"
             disabled={index === 0}
-            onClick={() => setIndex((current) => Math.max(0, current - 1))}
+            onClick={() =>
+              setPicked((current) => Math.max(0, (current ?? index) - 1))
+            }
           >
             Anterior
           </Button>
@@ -307,8 +319,8 @@ export function WorkoutPlayer({ day }: { day: WorkoutDay }) {
             className="h-11 flex-1"
             disabled={index === day.exercises.length - 1}
             onClick={() =>
-              setIndex((current) =>
-                Math.min(day.exercises.length - 1, current + 1),
+              setPicked((current) =>
+                Math.min(day.exercises.length - 1, (current ?? index) + 1),
               )
             }
           >

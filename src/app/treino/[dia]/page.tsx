@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Suspense } from "react";
 import { WorkoutPlayer } from "@/components/workout-player";
 import { getWorkout } from "@/lib/workouts";
 
@@ -25,5 +26,13 @@ export default function TreinoDiaPage() {
     );
   }
 
-  return <WorkoutPlayer key={day.id} day={day} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="h-64 animate-pulse rounded-3xl bg-card ring-1 ring-foreground/10" />
+      }
+    >
+      <WorkoutPlayer key={day.id} day={day} />
+    </Suspense>
+  );
 }

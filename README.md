@@ -19,7 +19,7 @@ Abre [http://127.0.0.1:4317](http://127.0.0.1:4317).
 
 ## O que tem
 
-- Semana de treino, com séries, descanso e troca se a máquina estiver ocupada
+- Semana de treino, com a foto da máquina, o passo a passo e a troca se ela estiver ocupada
 - Prato de treino e prato de descanso, em comida de mercado
 - Peso ideal pela altura, com calorias, proteína e água
 - Peso uma vez por semana, na segunda

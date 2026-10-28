@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHeader, SectionTitle } from "@/components/heading";
+import { MachineIndex } from "@/components/machine-guide";
 import { WeekList, weekProgress } from "@/components/week-list";
 import { useStore } from "@/lib/store";
 import { useToday } from "@/lib/use-today";
@@ -16,9 +17,8 @@ export default function TreinoPage() {
   return (
     <div>
       <PageHeader eyebrow="Treinos Melk" title="Quatro dias constroem. O sábado é extra.">
-        Segunda e quinta são de glúteo. Terça e sexta são só de coxa. Não tem
-        supino, inclinado nem flexão. Abdômen entra para firmar, sem exercício
-        que alarga a cintura.
+        Segunda e quinta são de glúteo. Terça e sexta são só de coxa. Cada
+        exercício tem a foto da máquina e o passo a passo. Não tem supino.
       </PageHeader>
 
       <p className="text-sm text-muted-foreground">
@@ -31,6 +31,11 @@ export default function TreinoPage() {
       <div className="mt-5">
         <WeekList />
       </div>
+
+      <SectionTitle hint="Toca na foto. O treino abre já nesse exercício.">
+        Como achar a máquina
+      </SectionTitle>
+      <MachineIndex />
 
       <SectionTitle hint="O plano só muda o corpo se a carga sobe com a forma boa.">
         Como evoluir
