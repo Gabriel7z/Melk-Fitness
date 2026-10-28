@@ -1,4 +1,5 @@
 import { formatNumber } from "@/lib/format";
+import { BODY_SCAN, scanMatches } from "@/lib/scan";
 import type { ActivityLevel, CheckIn, Profile } from "@/lib/types";
 
 export const ACTIVITY: Record<
@@ -48,6 +49,7 @@ export type Assessment = {
   carbs: number;
   waterMl: number;
   kcalNote: string;
+  bmrMeasured: boolean;
 };
 
 export function proteinGrams(weightKg: number) {
@@ -86,7 +88,9 @@ export function assess(profile: Profile): Assessment | null {
   const healthyMin = 18.5 * meters * meters;
   const healthyMax = 24.9 * meters * meters;
   const referenceKg = 22 * meters * meters;
-  const base = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
+  const scan = scanMatches(profile) ? BODY_SCAN : null;
+  const mifflin = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
+  const base = scan ? scan.bmr : mifflin;
   const tdee = base * ACTIVITY[profile.activity].factor;
   const kg = formatNumber(weightKg, 1);
   const imc = formatNumber(bmi, 1);
@@ -98,7 +102,14 @@ export function assess(profile: Profile): Assessment | null {
   let detail = "";
   let kcalRaw = tdee;
 
-  if (bmi >= 27) {
+  if (scan && bmi < 27) {
+    mode = "recomp";
+    goalLow = weightKg - 2;
+    goalHigh = weightKg;
+    headline = "O peso fica. A gordura sai.";
+    detail = `A avaliação de ${scan.dateLabel} mediu ${formatNumber(scan.fatPercent, 1)}% de gordura (${formatNumber(scan.fatKg, 1)} kg) em ${formatNumber(scan.weightKg, 2)} kg. O IMC de hoje, ${imc}, está na faixa saudável. O que a balança chamou de “levemente acima” é a gordura, marcada como alta. O músculo esquelético já veio excelente: ${formatNumber(scan.skeletalMusclePercent, 1)}%, ${formatNumber(scan.skeletalMuscleKg, 1)} kg. A proteína da ficha veio baixa, ${formatNumber(scan.proteinPercent, 1)}%. A balança sugeriu perder ${formatNumber(scan.scaleCutKg, 1)} kg e ir para perto de ${scan.scaleTargetKg} kg. Esse corte levaria peito e glúteo junto. A meta é ficar entre ${formatNumber(goalLow, 1)} e ${formatNumber(goalHigh, 1)} kg, com a gordura caminhando de ${formatNumber(scan.fatPercent, 1)}% para perto de ${scan.fatGoalPercent}%, e mais músculo na coxa e no glúteo. Gordura visceral ${scan.visceralFat} já está numa faixa tranquila.`;
+    kcalRaw = tdee - 200;
+  } else if (bmi >= 27) {
     mode = "deficit";
     const target = 24 * meters * meters;
     goalLow = target - 1;
@@ -137,15 +148,19 @@ export function assess(profile: Profile): Assessment | null {
     kcalRaw = tdee + 200;
   }
 
-  const protein = proteinGrams(weightKg);
+  const protein =
+    scan && mode === "recomp"
+      ? Math.round((weightKg * 2.2) / 5) * 5
+      : proteinGrams(weightKg);
   const fat = Math.round((weightKg * 0.9) / 5) * 5;
   const floor = Math.max(1700, protein * 4 + fat * 9 + 130 * 4);
   let kcal = Math.round(kcalRaw);
-  let kcalNote = "";
+  let kcalNote = scan
+    ? `Repouso de ${formatNumber(scan.bmr)} kcal medido na bioimpedância em ${scan.dateLabel}. O gasto do treino entra em cima disso.`
+    : "";
   if (kcal < floor) {
     kcal = Math.round(floor);
-    kcalNote =
-      "A conta pedia menos comida. Segurei num piso para o peito e o glúteo não pagarem a conta.";
+    kcalNote = `${kcalNote} A conta pedia menos comida. Segurei num piso para o peito e o glúteo não pagarem a conta.`.trim();
   }
   const carbs = Math.max(0, Math.round((kcal - protein * 4 - fat * 9) / 4));
   const modeLabel: Record<PlanMode, string> = {
@@ -179,6 +194,7 @@ export function assess(profile: Profile): Assessment | null {
     carbs,
     waterMl: waterMl(weightKg),
     kcalNote,
+    bmrMeasured: scan != null,
   };
 }
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PageHeader, SectionTitle } from "@/components/heading";
+import { ScanCard } from "@/components/scan-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -122,10 +123,15 @@ export default function EvolucaoPage() {
               {insight}
             </p>
           ) : (
-            <p className="rounded-3xl bg-card px-4 py-4 text-sm leading-relaxed text-muted-foreground ring-1 ring-foreground/10">
-              Ainda não tem medida. A primeira anotação é o ponto zero. Daqui a
-              duas semanas a comparação aparece aqui.
-            </p>
+            <div className="grid gap-3">
+              <ScanCard />
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Essa ficha é o ponto zero da gordura e do músculo. Cintura,
+                quadril, coxa e peito ela não mediu. A próxima anotação com a
+                fita é o que mostra se o glúteo subiu e a barriga desceu sem o
+                peito sumir.
+              </p>
+            </div>
           )}
 
           {weights.length >= 2 ? (

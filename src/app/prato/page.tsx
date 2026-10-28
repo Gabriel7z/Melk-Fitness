@@ -34,9 +34,9 @@ export default function PratoPage() {
   return (
     <div>
       <PageHeader eyebrow="Alimentação" title="Você vai comer.">
-        Definir não é pular refeição. A proteína segura o peito e o glúteo, o
-        carboidrato faz a coxa crescer, e a barriga chapa no ponto certo de
-        comida, não no abdominal infinito.
+        Sem superávit: o peso não sobe. A ficha marcou a proteína como baixa,
+        então ela fica alta aqui para o músculo entrar no lugar da gordura. O
+        carboidrato do dia de treino segura o glúteo e o peito.
       </PageHeader>
 
       {assessment ? (

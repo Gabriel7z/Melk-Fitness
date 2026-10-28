@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/heading";
 import { ProfileForm } from "@/components/profile-form";
 import { WeekList, weekProgress } from "@/components/week-list";
 import { assess, proteinGrams, waterMl } from "@/lib/body";
+import { ScanCard } from "@/components/scan-card";
 import { formatLongDate } from "@/lib/dates";
 import { firstName, formatNumber, formatWeight } from "@/lib/format";
 import { setHabit, useStore } from "@/lib/store";
@@ -24,7 +25,7 @@ const GOALS = [
   },
   {
     title: "Barriga mais chapada",
-    text: "Core que não alarga a cintura, e comida no ponto certo.",
+    text: "A gordura, os 31%, é que sai. O peso fica perto de 65 kg.",
   },
   {
     title: "Peito no lugar",
@@ -63,8 +64,8 @@ export default function HomePage() {
         eyebrow={today ? formatLongDate(today.key) : "Hoje"}
         title={name ? `Oi, ${name}` : "Oi"}
       >
-        Quatro treinos na semana. Glúteo e coxa crescem, a barriga define, o
-        peito fica. A balança é consequência.
+        O peso fica perto de 65 kg. A gordura desce, glúteo e coxa sobem, o
+        peito fica. Quatro treinos na semana.
       </PageHeader>
 
       {!today ? (
@@ -72,6 +73,8 @@ export default function HomePage() {
       ) : (
         <Today planIsWorkout={isWorkout(plan)} plan={plan} />
       )}
+
+      <ScanCard compact />
 
       {today && !profile.onboarded ? (
         <section className="mt-4 grid gap-3">
@@ -136,8 +139,8 @@ export default function HomePage() {
             {assessment.headline}
           </span>
           <span className="mt-2 block text-sm text-muted-foreground">
-            Cerca de {formatNumber(assessment.kcal)} kcal hoje. Abre o peso
-            ideal.
+            Cerca de {formatNumber(assessment.kcal)} kcal, sem subir o peso.
+            Abre a leitura da avaliação.
           </span>
         </Link>
       ) : null}

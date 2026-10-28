@@ -9,18 +9,18 @@ import type {
   Store,
 } from "@/lib/types";
 
-const PROFILE_KEY = "melk.profile.v1";
-const CHECKINS_KEY = "melk.checkins.v1";
-const SESSIONS_KEY = "melk.sessions.v1";
-const HABITS_KEY = "melk.habits.v1";
+const PROFILE_KEY = "melk.profile.v2";
+const CHECKINS_KEY = "melk.checkins.v2";
+const SESSIONS_KEY = "melk.sessions.v2";
+const HABITS_KEY = "melk.habits.v2";
 
 export const defaultProfile: Profile = {
-  name: "",
+  name: "Amanda",
   weightKg: 65,
-  heightCm: null,
+  heightCm: 170,
   age: null,
   activity: "moderado",
-  onboarded: false,
+  onboarded: true,
 };
 
 const emptyHabit = (): HabitDay => ({

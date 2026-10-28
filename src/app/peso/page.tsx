@@ -16,6 +16,8 @@ import {
   closestHeight,
   HEIGHT_ROWS,
 } from "@/lib/body";
+import { ScanCard } from "@/components/scan-card";
+import { BODY_SCAN, scanMatches } from "@/lib/scan";
 import { formatNumber, formatWeight } from "@/lib/format";
 import { useMounted, useStore } from "@/lib/store";
 import { cn } from "cn";
@@ -28,23 +30,42 @@ export default function PesoPage() {
   const live = reading.profile;
   const assessment = mounted ? assess(live) : null;
   const highlight = closestHeight(live.heightCm);
+  const usingScan = scanMatches(live);
 
   return (
     <div>
       <PageHeader
         eyebrow="Peso ideal"
-        title={`${formatWeight(live.weightKg)} não é uma sentença.`}
+        title={
+          usingScan
+            ? "O peso fica. A gordura sai."
+            : `${formatWeight(live.weightKg)} não é uma sentença.`
+        }
       >
-        O mesmo peso é definição em uma altura e é ajuste em outra. Para
-        glúteo maior, coxa grossa, barriga chapada e peito no lugar, a faixa
-        importa mais do que um número redondo.
+        {usingScan
+          ? `Com 1,70 m, ${formatWeight(live.weightKg)} já é um peso de ficar. A última avaliação, de ${BODY_SCAN.dateLabel}, mostrou gordura alta (${formatNumber(BODY_SCAN.fatPercent, 1)}%) e músculo esquelético já excelente (${formatNumber(BODY_SCAN.skeletalMusclePercent, 1)}%). A proteína da ficha veio baixa. O plano é perder gordura e ganhar massa, com a balança entre ${formatNumber(live.weightKg - 2, 0)} e ${formatNumber(live.weightKg, 0)} kg.`
+          : "O mesmo peso é definição em uma altura e é ajuste em outra. Para glúteo maior, coxa grossa, barriga chapada e peito no lugar, a faixa importa mais do que um número redondo."}
       </PageHeader>
 
-      <p className="text-sm leading-relaxed text-muted-foreground">
-        A tabela usa o peso de hoje,{" "}
-        {mounted ? formatWeight(live.weightKg) : "65 kg"}. IMC 22 é só o meio
-        da faixa saudável. Quem ganha músculo pesa mais e pode estar definida
-        acima disso.
+      {usingScan ? <ScanCard /> : null}
+
+      {usingScan ? (
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          A balança pediu para perder {formatNumber(BODY_SCAN.scaleCutKg, 1)} kg
+          e ir para perto de {BODY_SCAN.scaleTargetKg} kg. Isso secaria peito e
+          glúteo junto. O desenho certo é outro: gordura de{" "}
+          {formatNumber(BODY_SCAN.fatPercent, 1)}% para perto de{" "}
+          {BODY_SCAN.fatGoalPercent}%, mais músculo na coxa e no glúteo em cima
+          dos {formatNumber(BODY_SCAN.skeletalMuscleKg, 1)} kg que já estão
+          excelentes, peso quase no mesmo lugar. Se a fita mostrar cintura menor
+          e quadril igual ou maior, está dando certo mesmo com a balança parada.
+        </p>
+      ) : null}
+
+      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+        {usingScan
+          ? "A tabela só situa o IMC. Em 1,70 m, 65 kg já está no meio da faixa saudável. Ganhar músculo aqui não precisa aparecer como peso a mais."
+          : `A tabela usa o peso de hoje, ${mounted ? formatWeight(live.weightKg) : "65 kg"}. IMC 22 é só o meio da faixa saudável. Quem ganha músculo pesa mais e pode estar definida acima disso.`}
       </p>
 
       <div className="mt-4 overflow-x-auto rounded-3xl bg-card ring-1 ring-foreground/10">
@@ -140,9 +161,11 @@ export default function PesoPage() {
             Gasto estimado em {formatNumber(assessment.tdee)} kcal. Carboidrato
             perto de {assessment.carbs} g, gordura perto de {assessment.fat} g,
             água {formatNumber(assessment.waterMl / 1000, 1)} L.
-            {assessment.ageAssumed
-              ? " Usei 25 anos enquanto a idade não entra. Muda pouco a conta."
-              : ""}
+            {assessment.bmrMeasured
+              ? " A idade não entrou: o repouso veio da bioimpedância."
+              : assessment.ageAssumed
+                ? " Usei 25 anos enquanto a idade não entra. Muda pouco a conta."
+                : ""}
             {assessment.kcalNote ? ` ${assessment.kcalNote}` : ""}
           </p>
           {assessment.age < 18 ? (
@@ -181,8 +204,9 @@ export default function PesoPage() {
         </li>
       </ul>
       <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-        Conta de gasto de Mifflin-St Jeor e faixa de IMC da OMS. É ponto de
-        partida, não exame.
+        {usingScan
+          ? "O repouso veio da bioimpedância de balança, que estima gordura e músculo. Não é um exame de laboratório. A faixa de IMC é a da OMS."
+          : "Conta de gasto de Mifflin-St Jeor e faixa de IMC da OMS. É ponto de partida, não exame."}
       </p>
     </div>
   );
