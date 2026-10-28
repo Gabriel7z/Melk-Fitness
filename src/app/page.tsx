@@ -48,12 +48,12 @@ const GOALS: {
   },
   {
     title: "Barriga mais chapada",
-    text: "A gordura, os 31%, é que sai. O peso fica perto de 65 kg.",
+    text: "A gordura, os 31%, é que sai. A balança fica perto do peso de hoje.",
     icon: Flame,
   },
   {
     title: "Peito no lugar",
-    text: "Sem supino. O peito fica com o peso perto de 65 kg e a proteína no prato.",
+    text: "Sem supino. O peito fica com a proteína no prato, sem dieta de corte.",
     icon: Shield,
   },
 ];
@@ -114,8 +114,8 @@ export default function HomePage() {
           {name ? `Oi, ${name}` : "Oi"}
         </h1>
         <p className="relative mt-3 max-w-xl text-lg leading-snug font-semibold">
-          O peso fica perto de 65 kg. A gordura desce. Glúteo e coxa sobem. O
-          peito fica.
+          Hoje são {formatWeight(profile.weightKg)}. A gordura desce. Glúteo e
+          coxa sobem. O peito fica.
         </p>
         <p className="relative mt-2 text-sm text-primary-foreground/80">
           {today ? formatLongDate(today.key) : "Sem dieta de emagrecer."}
@@ -146,7 +146,11 @@ export default function HomePage() {
           icon={Scale}
           label="Peso"
           value={formatWeight(profile.weightKg)}
-          hint="Recomposição, 63 a 65 kg"
+          hint={
+            assessment
+              ? `Recomposição, ${formatNumber(assessment.goalLow, 0)} a ${formatNumber(assessment.goalHigh, 0)} kg`
+              : "Peso de hoje"
+          }
           tone="rose"
           delay="40ms"
         />
@@ -199,7 +203,7 @@ export default function HomePage() {
         <Link href="/peso" className="melk-card block px-5 py-4">
           <span className="block font-semibold">Falta a altura</span>
           <span className="mt-1 block text-sm text-muted-foreground">
-            65 kg muda de sentido entre 1,60 m e 1,70 m.
+            O mesmo peso muda de sentido entre 1,60 m e 1,70 m.
           </span>
         </Link>
       ) : null}

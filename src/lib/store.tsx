@@ -23,7 +23,7 @@ const MONTHS_KEY = "melk.months.v2";
 
 export const defaultProfile: Profile = {
   name: "Amanda",
-  weightKg: 65,
+  weightKg: 68,
   heightCm: 170,
   age: null,
   activity: "moderado",
@@ -80,7 +80,7 @@ function sanitizeProfile(value: unknown): Profile {
       : "moderado";
   return {
     name: typeof record.name === "string" ? record.name.slice(0, 40) : "",
-    weightKg: numberOrNull(record.weightKg, 35, 180) ?? 65,
+    weightKg: numberOrNull(record.weightKg, 35, 180) ?? 68,
     heightCm: numberOrNull(record.heightCm, 140, 210),
     age: numberOrNull(record.age, 16, 80),
     activity,
@@ -216,15 +216,41 @@ function sanitizeMonths(value: unknown): MonthlyReview[] {
 }
 
 function load() {
+  const savedProfile = readJson(PROFILE_KEY);
+  const profile = sanitizeProfile(savedProfile);
+  let weeks = sanitizeWeeks(readJson(WEEKS_KEY));
+  // 65 kg was the seeded start, not the scale on 28/10/2026.
+  const correctSeed =
+    weeks.length === 0 &&
+    (savedProfile == null || profile.weightKg === 65);
+  const migrated = correctSeed ? { ...profile, weightKg: 68 } : profile;
+  if (correctSeed) {
+    weeks = [
+      {
+        id: "semana-2026-10-26",
+        week: "2026-10-26",
+        date: "2026-10-28",
+        weightKg: 68,
+      },
+    ];
+  }
   memory = {
-    profile: sanitizeProfile(readJson(PROFILE_KEY)),
+    profile: migrated,
     checkins: sanitizeCheckins(readJson(CHECKINS_KEY)),
     sessions: sanitizeSessions(readJson(SESSIONS_KEY)),
     habits: sanitizeHabits(readJson(HABITS_KEY)),
-    weeks: sanitizeWeeks(readJson(WEEKS_KEY)),
+    weeks,
     months: sanitizeMonths(readJson(MONTHS_KEY)),
   };
   loaded = true;
+  if (correctSeed) {
+    try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(migrated));
+      localStorage.setItem(WEEKS_KEY, JSON.stringify(weeks));
+    } catch {
+      // The corrected weight still shows in this session.
+    }
+  }
 }
 
 function persist(store: Store) {

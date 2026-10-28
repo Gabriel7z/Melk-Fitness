@@ -38,7 +38,7 @@ export function WeekWeightCard({ history = true }: { history?: boolean }) {
   function save() {
     const weightKg = parseNumber(value);
     if (weightKg == null || weightKg < 35 || weightKg > 180) {
-      setError("Peso em quilos, tipo 65 ou 65,2.");
+      setError("Peso em quilos, tipo 68 ou 68,2.");
       return;
     }
     saveWeekWeight({ week, date: today!.key, weightKg });
@@ -76,7 +76,7 @@ export function WeekWeightCard({ history = true }: { history?: boolean }) {
               id="peso-semana"
               inputMode="decimal"
               value={value}
-              placeholder="65,0"
+              placeholder="68,0"
               className="h-11 pr-12 text-base"
               onChange={(event) => {
                 setDraft(event.target.value);

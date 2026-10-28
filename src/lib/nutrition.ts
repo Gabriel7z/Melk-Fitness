@@ -283,7 +283,7 @@ export const RULES = [
   },
   {
     title: "Água no dia inteiro",
-    text: "Perto de 35 ml por quilo. Em 65 kg, são uns 2,3 litros. Refrigerante e suco de caixinha ficam de fora na maior parte da semana.",
+    text: "Perto de 35 ml por quilo. Em 68 kg, são uns 2,4 litros. Refrigerante e suco de caixinha ficam de fora na maior parte da semana.",
   },
   {
     title: "Álcool atrapalha os dois lados",

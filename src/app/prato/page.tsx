@@ -49,7 +49,7 @@ export default function PratoPage() {
       ) : (
         <p className="rounded-3xl bg-card px-4 py-4 text-sm leading-relaxed text-muted-foreground ring-1 ring-foreground/10">
           Sem a altura, o prato de treino fica perto de 1.900 kcal e uns 150 g
-          de proteína, uma base boa para 65 kg. Em Peso, a conta fica a sua.
+          de proteína, uma base boa para 68 kg. Em Peso, a conta fica a sua.
         </p>
       )}
       {assessment?.kcalNote ? (

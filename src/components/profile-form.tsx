@@ -21,7 +21,7 @@ export type Draft = {
 type FieldError = "weight" | "height" | "age";
 
 const ERRORS: Record<FieldError, string> = {
-  weight: "Peso em quilos, tipo 65 ou 65,5.",
+  weight: "Peso em quilos, tipo 68 ou 68,2.",
   height: "Altura em centímetros, tipo 163.",
   age: "Idade entre 16 e 80, ou deixa em branco.",
 };

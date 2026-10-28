@@ -64,8 +64,8 @@ export default function PesoPage() {
 
       <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
         {usingScan
-          ? "A tabela só situa o IMC. Em 1,70 m, 65 kg já está no meio da faixa saudável. Ganhar músculo aqui não precisa aparecer como peso a mais."
-          : `A tabela usa o peso de hoje, ${mounted ? formatWeight(live.weightKg) : "65 kg"}. IMC 22 é só o meio da faixa saudável. Quem ganha músculo pesa mais e pode estar definida acima disso.`}
+          ? `A tabela só situa o IMC. Em 1,70 m, ${formatWeight(live.weightKg)} continua na faixa saudável. Ganhar músculo aqui não precisa aparecer como peso a mais.`
+          : `A tabela usa o peso de hoje, ${mounted ? formatWeight(live.weightKg) : "68 kg"}. IMC 22 é só o meio da faixa saudável. Quem ganha músculo pesa mais e pode estar definida acima disso.`}
       </p>
 
       <div className="mt-4 overflow-x-auto rounded-3xl bg-card ring-1 ring-foreground/10">

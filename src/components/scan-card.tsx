@@ -49,9 +49,9 @@ export function ScanCard({ compact = false }: { compact?: boolean }) {
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
         Naquele dia: {formatNumber(BODY_SCAN.weightKg, 2)} kg, 1,70 m, IMC{" "}
-        {formatNumber(BODY_SCAN.bmi, 1)}. A ficha já tem um tempo. O ponto de
-        partida foi 65 kg. O peso de hoje é o da segunda. Gordura veio alta,
-        músculo esquelético excelente, proteína baixa.
+        {formatNumber(BODY_SCAN.bmi, 1)}. A ficha já tem um tempo. Em
+        28/10/2026 a balança marcou 68 kg. Gordura veio alta, músculo
+        esquelético excelente, proteína baixa.
       </p>
       <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {STATS.map(([label, value]) => (

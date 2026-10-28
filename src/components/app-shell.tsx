@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const mounted = useMounted();
   const { profile } = useStore();
-  const weight = mounted ? formatWeight(profile.weightKg) : "65 kg";
+  const weight = mounted ? formatWeight(profile.weightKg) : "68 kg";
 
   return (
     <div className="min-h-dvh md:grid md:grid-cols-[260px_1fr]">
