@@ -1,42 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import { PageHeader, SectionTitle } from "@/components/heading";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { assess } from "@/lib/body";
+import { cycleWindow, shoppingFor, type PlannedDay } from "@/lib/cycle";
 import { useToday } from "@/lib/use-today";
 import { formatNumber } from "@/lib/format";
 import {
-  MENUS,
   MORNING_TRAINING,
-  plateAdjustment,
   RULES,
-  SHOPPING,
   SWAPS,
   foodKcal,
   menuTotals,
+  plateAdjustment,
   sumFoods,
-  type Menu,
 } from "@/lib/nutrition";
 import { useMounted, useStore } from "@/lib/store";
-import { isWorkout, planForWeekday } from "@/lib/workouts";
+import { cn } from "cn";
 
 export default function PratoPage() {
   const mounted = useMounted();
   const today = useToday();
   const { profile } = useStore();
   const assessment = mounted ? assess(profile) : null;
-  const trainingToday = today
-    ? isWorkout(planForWeekday(today.weekday))
-    : null;
+  const plan = today ? cycleWindow(today.key) : null;
+  const [picked, setPicked] = useState<string | null>(null);
+  const selected =
+    plan?.days.find((day) => day.date === (picked ?? today?.key)) ??
+    plan?.days[0] ??
+    null;
 
   return (
     <div>
-      <PageHeader eyebrow="Alimentação" title="Você vai comer.">
-        A comida serve para a gordura sair e o músculo ficar. Sem superávit: o peso não sobe. A ficha marcou a proteína como baixa,
-        então ela fica alta aqui para o músculo entrar no lugar da gordura. O
-        carboidrato do dia de treino segura o glúteo e o peito.
+      <PageHeader eyebrow="Alimentação" title="Quinze dias de prato.">
+        O cardápio vale 15 dias e depois troca. Dia de treino tem mais arroz,
+        batata e tapioca. Quarta, sábado e domingo a proteína fica e o
+        carboidrato desce. Sem tilápia.
       </PageHeader>
 
       {assessment ? (
@@ -56,30 +57,60 @@ export default function PratoPage() {
         <p className="mt-3 text-sm text-muted-foreground">{assessment.kcalNote}</p>
       ) : null}
 
-      {trainingToday == null ? (
+      {!plan || !selected ? (
         <div className="mt-6 h-64 animate-pulse rounded-3xl bg-card ring-1 ring-foreground/10" />
       ) : (
-      <Tabs
-        defaultValue={trainingToday ? "treino" : "descanso"}
-        className="mt-6"
-      >
-        <TabsList className="h-11 w-full">
-          <TabsTrigger value="treino" className="h-9 flex-1">
-            Treino{trainingToday ? " · hoje" : ""}
-          </TabsTrigger>
-          <TabsTrigger value="descanso" className="h-9 flex-1">
-            Descanso{trainingToday ? "" : " · hoje"}
-          </TabsTrigger>
-        </TabsList>
-        {MENUS.map((menu) => (
-          <TabsContent key={menu.id} value={menu.id} className="mt-4">
-            <MenuBlock
-              menu={menu}
-              target={assessment?.kcal ?? null}
-            />
-          </TabsContent>
-        ))}
-      </Tabs>
+        <>
+          <section className="mt-6 rounded-3xl bg-card px-4 py-4 ring-1 ring-foreground/10">
+            <p className="text-xs font-medium tracking-[0.16em] text-primary uppercase">
+              Ciclo {plan.cycleNumber} de 2 · dia {selected.dayNumber} de 15
+            </p>
+            <h2 className="font-heading mt-1 text-2xl leading-tight">
+              {plan.cycleName}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              De {formatDayMonth(plan.start)} a {formatDayMonth(plan.end)}. No
+              dia {formatDayMonth(plan.nextStart)} entra o{" "}
+              {plan.cycleNumber === 1 ? "segundo" : "primeiro"} ciclo.
+            </p>
+          </section>
+
+          <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+            {plan.days.map((day) => {
+              const active = day.date === selected.date;
+              const isToday = day.date === today?.key;
+              return (
+                <button
+                  key={day.date}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setPicked(day.date)}
+                  className={cn(
+                    "min-w-16 shrink-0 rounded-2xl px-2 py-2 text-center ring-1 ring-foreground/10",
+                    active
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card text-foreground",
+                  )}
+                >
+                  <span className="block text-[10px] font-semibold tracking-wide uppercase">
+                    {day.weekdayShort}
+                  </span>
+                  <span className="font-heading block text-lg leading-tight font-bold">
+                    {Number(day.date.slice(8, 10))}
+                  </span>
+                  <span className="block text-[10px] leading-tight">
+                    {isToday ? "Hoje" : day.kindLabel}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <DayMeals
+            day={selected}
+            target={assessment?.kcal ?? null}
+          />
+        </>
       )}
 
       <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -103,24 +134,28 @@ export default function PratoPage() {
         ))}
       </div>
 
-      <SectionTitle hint="Uma semana, ajustando o que já tem em casa.">
-        Compras
-      </SectionTitle>
-      <div className="grid gap-3">
-        {SHOPPING.map((group) => (
-          <section
-            key={group.group}
-            className="rounded-3xl bg-card px-4 py-4 ring-1 ring-foreground/10"
-          >
-            <h3 className="font-medium">{group.group}</h3>
-            <ul className="mt-2 grid gap-1 text-sm text-muted-foreground">
-              {group.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
+      {plan ? (
+        <>
+          <SectionTitle hint="O que estes 15 dias pedem. A quantidade é por dia de uso, não por quilo.">
+            Compras do ciclo
+          </SectionTitle>
+          <div className="grid gap-3">
+            {shoppingFor(plan.days).map((group) => (
+              <section
+                key={group.group}
+                className="rounded-3xl bg-card px-4 py-4 ring-1 ring-foreground/10"
+              >
+                <h3 className="font-medium">{group.group}</h3>
+                <ul className="mt-2 grid gap-1 text-sm text-muted-foreground">
+                  {group.items.map((item) => (
+                    <li key={item.name}>{item.label}</li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </>
+      ) : null}
 
       <SectionTitle>Regras do prato</SectionTitle>
       <div className="grid gap-2">
@@ -140,23 +175,25 @@ export default function PratoPage() {
   );
 }
 
-function MenuBlock({ menu, target }: { menu: Menu; target: number | null }) {
-  const totals = menuTotals(menu);
+function DayMeals({ day, target }: { day: PlannedDay; target: number | null }) {
+  const totals = menuTotals(day.plate);
   const adjustment = plateAdjustment(target, totals.kcal);
   return (
-    <div className="grid gap-3">
+    <div className="mt-4 grid gap-3">
       <div className="rounded-3xl bg-sage-soft px-4 py-4">
         <p className="text-xs font-medium tracking-[0.16em] text-sage uppercase">
           {formatNumber(totals.kcal)} kcal · {totals.p} g proteína · {totals.c} g
           carbo · {totals.f} g gordura
         </p>
-        <h2 className="font-heading mt-1 text-2xl">{adjustment.title}</h2>
+        <h2 className="font-heading mt-1 text-2xl">
+          {day.kindLabel} · {day.plate.title}
+        </h2>
         <p className="mt-1 text-sm leading-relaxed text-accent-foreground">
-          {adjustment.text}
+          {adjustment.title}. {adjustment.text}
         </p>
-        <p className="mt-2 text-sm text-accent-foreground/80">{menu.blurb}</p>
+        <p className="mt-2 text-sm text-accent-foreground/80">{day.plate.blurb}</p>
       </div>
-      {menu.meals.map((meal) => {
+      {day.plate.meals.map((meal) => {
         const mealTotal = sumFoods(meal.foods);
         return (
           <Card key={meal.id}>
@@ -167,20 +204,20 @@ function MenuBlock({ menu, target }: { menu: Menu; target: number | null }) {
             </CardHeader>
             <CardContent>
               <ul className="grid gap-2">
-                {meal.foods.map((food) => (
+                {meal.foods.map((item) => (
                   <li
-                    key={`${meal.id}-${food.name}`}
+                    key={`${meal.id}-${item.name}`}
                     className="flex items-baseline justify-between gap-3 text-sm"
                   >
                     <span>
-                      <span className="font-medium">{food.name}</span>
+                      <span className="font-medium">{item.name}</span>
                       <span className="text-muted-foreground">
                         {" "}
-                        · {food.amount}
+                        · {item.amount}
                       </span>
                     </span>
                     <span className="shrink-0 text-muted-foreground tabular-nums">
-                      {foodKcal(food)} kcal
+                      {foodKcal(item)} kcal
                     </span>
                   </li>
                 ))}
@@ -202,4 +239,13 @@ function Macro({ label, value }: { label: string; value: string }) {
       <p className="font-heading mt-1 text-2xl">{value}</p>
     </div>
   );
+}
+
+function formatDayMonth(key: string) {
+  const [year, month, day] = key.split("-").map(Number);
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    day: "numeric",
+    month: "long",
+  }).format(new Date(Date.UTC(year, (month ?? 1) - 1, day ?? 1, 15)));
 }

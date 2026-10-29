@@ -4,6 +4,9 @@ export type Food = {
   p: number;
   c: number;
   f: number;
+  /** Nome na lista de compras, quando o prato usa o mesmo alimento de jeitos diferentes. */
+  shop?: string;
+  aisle?: "Proteína" | "Carboidrato" | "Junto";
 };
 
 export type Meal = {
@@ -40,151 +43,6 @@ export function menuTotals(menu: Menu) {
   return sumFoods(menu.meals.flatMap((meal) => meal.foods));
 }
 
-export const TRAINING_MENU: Menu = {
-  id: "treino",
-  title: "Dia de treino",
-  blurb:
-    "Proteína em toda refeição e carboidrato perto do treino. É o prato de segunda, terça, quinta e sexta.",
-  meals: [
-    {
-      id: "cafe",
-      name: "Café",
-      when: "Ao acordar",
-      foods: [
-        { name: "Ovos", amount: "2 unidades", p: 13, c: 1, f: 10 },
-        { name: "Aveia em flocos", amount: "40 g", p: 5, c: 26, f: 3 },
-        { name: "Mamão", amount: "150 g", p: 1, c: 15, f: 0 },
-      ],
-    },
-    {
-      id: "manha",
-      name: "Lanche da manhã",
-      when: "Meio da manhã",
-      foods: [
-        {
-          name: "Iogurte grego natural, sem açúcar",
-          amount: "170 g",
-          p: 15,
-          c: 7,
-          f: 8,
-        },
-        { name: "Chia", amount: "10 g", p: 2, c: 4, f: 3 },
-      ],
-    },
-    {
-      id: "almoco",
-      name: "Almoço",
-      when: "Prato principal",
-      foods: [
-        { name: "Peito de frango grelhado", amount: "150 g", p: 46, c: 0, f: 5 },
-        { name: "Arroz cozido", amount: "4 colheres (100 g)", p: 3, c: 28, f: 0 },
-        { name: "Feijão cozido", amount: "1 concha (80 g)", p: 5, c: 13, f: 1 },
-        { name: "Salada crua", amount: "à vontade", p: 1, c: 5, f: 0 },
-        { name: "Brócolis", amount: "100 g", p: 3, c: 7, f: 0 },
-        { name: "Azeite", amount: "1 colher de chá", p: 0, c: 0, f: 5 },
-      ],
-    },
-    {
-      id: "pre",
-      name: "Antes do treino",
-      when: "1h a 1h30 antes",
-      foods: [
-        { name: "Goma de tapioca", amount: "30 g", p: 0, c: 27, f: 0 },
-        { name: "Frango desfiado", amount: "80 g", p: 25, c: 0, f: 3 },
-        { name: "Banana", amount: "1 média", p: 1, c: 21, f: 0 },
-        { name: "Castanha de caju", amount: "15 g", p: 3, c: 5, f: 7 },
-      ],
-    },
-    {
-      id: "jantar",
-      name: "Jantar",
-      when: "Depois do treino",
-      foods: [
-        { name: "Tilápia grelhada", amount: "140 g", p: 29, c: 0, f: 2 },
-        { name: "Batata-doce cozida", amount: "150 g", p: 2, c: 30, f: 0 },
-        { name: "Salada e legumes", amount: "1 prato", p: 2, c: 8, f: 0 },
-        { name: "Azeite", amount: "1 colher de chá", p: 0, c: 0, f: 5 },
-      ],
-    },
-  ],
-};
-
-export const REST_MENU: Menu = {
-  id: "descanso",
-  title: "Dia de descanso",
-  blurb:
-    "A proteína continua. O carboidrato desce um pouco porque não tem treino. Quarta, sábado à noite e domingo.",
-  meals: [
-    {
-      id: "cafe",
-      name: "Café",
-      when: "Ao acordar",
-      foods: [
-        { name: "Ovos", amount: "2 unidades", p: 13, c: 1, f: 10 },
-        { name: "Aveia em flocos", amount: "30 g", p: 4, c: 20, f: 2 },
-        { name: "Mamão", amount: "150 g", p: 1, c: 15, f: 0 },
-      ],
-    },
-    {
-      id: "manha",
-      name: "Lanche da manhã",
-      when: "Meio da manhã",
-      foods: [
-        {
-          name: "Iogurte grego natural, sem açúcar",
-          amount: "170 g",
-          p: 15,
-          c: 7,
-          f: 8,
-        },
-        { name: "Chia", amount: "10 g", p: 2, c: 4, f: 3 },
-      ],
-    },
-    {
-      id: "almoco",
-      name: "Almoço",
-      when: "Prato principal",
-      foods: [
-        { name: "Peito de frango grelhado", amount: "150 g", p: 46, c: 0, f: 5 },
-        { name: "Arroz cozido", amount: "3 colheres (70 g)", p: 2, c: 20, f: 0 },
-        { name: "Feijão cozido", amount: "1 concha (80 g)", p: 5, c: 13, f: 1 },
-        { name: "Salada crua", amount: "à vontade", p: 1, c: 5, f: 0 },
-        { name: "Brócolis", amount: "100 g", p: 3, c: 7, f: 0 },
-        { name: "Azeite", amount: "1 colher de chá", p: 0, c: 0, f: 5 },
-      ],
-    },
-    {
-      id: "tarde",
-      name: "Lanche da tarde",
-      when: "Fome do meio da tarde",
-      foods: [
-        {
-          name: "Iogurte grego natural, sem açúcar",
-          amount: "170 g",
-          p: 15,
-          c: 7,
-          f: 8,
-        },
-        { name: "Castanha de caju", amount: "15 g", p: 3, c: 5, f: 7 },
-        { name: "Maçã", amount: "1 unidade", p: 0, c: 14, f: 0 },
-      ],
-    },
-    {
-      id: "jantar",
-      name: "Jantar",
-      when: "Noite",
-      foods: [
-        { name: "Omelete", amount: "2 ovos", p: 13, c: 1, f: 10 },
-        { name: "Legumes refogados", amount: "1 xícara", p: 2, c: 8, f: 3 },
-        { name: "Batata-doce cozida", amount: "100 g", p: 1, c: 20, f: 0 },
-        { name: "Salada", amount: "à vontade", p: 1, c: 5, f: 0 },
-      ],
-    },
-  ],
-};
-
-export const MENUS = [TRAINING_MENU, REST_MENU];
-
 export function plateAdjustment(targetKcal: number | null, menuKcal: number) {
   if (targetKcal == null) {
     return {
@@ -202,12 +60,12 @@ export function plateAdjustment(targetKcal: number | null, menuKcal: number) {
   if (diff < -180) {
     return {
       title: `Passa uns ${Math.round(Math.abs(diff) / 10) * 10} kcal do alvo`,
-      text: "Tira a castanha e diminui o arroz ou a batata. Deixa frango, ovo, iogurte e peixe. Sem isso, o peito e o glúteo somem primeiro.",
+      text: "Diminui o arroz ou a batata. Deixa frango, ovo, iogurte e carne. Sem isso, o peito e o glúteo somem primeiro.",
     };
   }
   return {
     title: "Perto do seu alvo",
-    text: "Pode repetir este prato. Se a fome apertar à noite, adiciona iogurte natural, não biscoito.",
+    text: "Pode seguir este prato. Se a fome apertar à noite, adiciona iogurte natural, não biscoito.",
   };
 }
 
@@ -225,53 +83,23 @@ export const SWAPS = [
     text: "Iogurte natural com mais um ovo ou um scoop de whey, se você já usa. Whey não é obrigatório.",
   },
   {
-    title: "Tilápia",
-    text: "Qualquer peixe branco, frango ou uma omelete caprichada.",
-  },
-];
-
-export const SHOPPING = [
-  {
-    group: "Proteína",
-    items: [
-      "Peito de frango, cerca de 1,6 kg",
-      "Tilápia ou outro peixe branco, 500 g",
-      "Ovos, 20 unidades",
-      "Iogurte grego natural sem açúcar, cerca de 1,2 kg",
-    ],
-  },
-  {
-    group: "Carboidrato",
-    items: [
-      "Aveia, 400 g",
-      "Arroz, 1 kg",
-      "Feijão, 500 g",
-      "Batata-doce, 1 kg",
-      "Goma de tapioca, 200 g",
-      "Banana, mamão e maçã",
-    ],
-  },
-  {
-    group: "Junto",
-    items: [
-      "Folhas, tomate, pepino e brócolis",
-      "Azeite",
-      "Chia",
-      "Castanha de caju, 150 g",
-      "Café e canela",
-      "Creatina, se for usar: 5 g por dia",
-    ],
+    title: "Patinho",
+    text: "Coxão mole, acém magro ou frango. Grelhado ou na panela, sem fritura.",
   },
 ];
 
 export const RULES = [
   {
     title: "Proteína em toda refeição",
-    text: "Ovo, iogurte, frango, carne ou peixe. É o que segura peito, glúteo e coxa enquanto a barriga define.",
+    text: "Ovo, iogurte, frango ou carne. É o que segura peito, glúteo e coxa enquanto a barriga define.",
   },
   {
     title: "Carboidrato no dia de perna",
     text: "Arroz, batata, tapioca e fruta. Cortar carbo deixa o treino fraco e o bumbum não cresce.",
+  },
+  {
+    title: "O cardápio troca em 15 dias",
+    text: "Cada quinzena tem pratos diferentes. No dia 16 entra o outro ciclo, e depois volta o primeiro.",
   },
   {
     title: "Barriga não chapa de abdominal",

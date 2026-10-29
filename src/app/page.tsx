@@ -370,7 +370,7 @@ function Today({
             href="/prato"
             className={cn(buttonVariants({ variant: "default" }), "h-12 px-5 text-base")}
           >
-            Prato de descanso
+            Ver o prato de hoje
           </Link>
           <Link
             href="/treino"
