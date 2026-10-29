@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import type {
+  BioScan,
   CheckIn,
   Energy,
   HabitDay,
@@ -20,6 +21,8 @@ const SESSIONS_KEY = "melk.sessions.v2";
 const HABITS_KEY = "melk.habits.v2";
 const WEEKS_KEY = "melk.weeks.v2";
 const MONTHS_KEY = "melk.months.v2";
+const BIOS_KEY = "melk.bios.v1";
+const CYCLE_KEY = "melk.cycle.v1";
 
 export const defaultProfile: Profile = {
   name: "Amanda",
@@ -45,6 +48,8 @@ function defaultStore(): Store {
     habits: {},
     weeks: [],
     months: [],
+    bios: [],
+    cycleWeeks: [],
   };
 }
 
@@ -215,6 +220,35 @@ function sanitizeMonths(value: unknown): MonthlyReview[] {
   });
 }
 
+function sanitizeBios(value: unknown): BioScan[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const record = item as Partial<BioScan>;
+    const date = dateKey(record.date);
+    const weightKg = numberOrNull(record.weightKg, 35, 180);
+    const fatPercent = numberOrNull(record.fatPercent, 5, 70);
+    if (!date || weightKg == null || fatPercent == null || typeof record.id !== "string") {
+      return [];
+    }
+    return [
+      {
+        id: record.id,
+        date,
+        weightKg,
+        fatPercent,
+        musclePercent: numberOrNull(record.musclePercent, 15, 60),
+        visceralFat: numberOrNull(record.visceralFat, 1, 30),
+      },
+    ];
+  });
+}
+
+function sanitizeCycleWeeks(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => dateKey(item) != null);
+}
+
 function load() {
   const savedProfile = readJson(PROFILE_KEY);
   const profile = sanitizeProfile(savedProfile);
@@ -241,6 +275,8 @@ function load() {
     habits: sanitizeHabits(readJson(HABITS_KEY)),
     weeks,
     months: sanitizeMonths(readJson(MONTHS_KEY)),
+    bios: sanitizeBios(readJson(BIOS_KEY)),
+    cycleWeeks: sanitizeCycleWeeks(readJson(CYCLE_KEY)),
   };
   loaded = true;
   if (correctSeed) {
@@ -261,6 +297,8 @@ function persist(store: Store) {
     localStorage.setItem(HABITS_KEY, JSON.stringify(store.habits));
     localStorage.setItem(WEEKS_KEY, JSON.stringify(store.weeks));
     localStorage.setItem(MONTHS_KEY, JSON.stringify(store.months));
+    localStorage.setItem(BIOS_KEY, JSON.stringify(store.bios));
+    localStorage.setItem(CYCLE_KEY, JSON.stringify(store.cycleWeeks));
   } catch {
     // O plano continua nesta sessão mesmo se o celular recusar gravar.
   }
@@ -396,6 +434,40 @@ export function saveWeekWeight(input: {
   });
 }
 
+export function saveBio(input: Omit<BioScan, "id"> & { id?: string }) {
+  update((store) => {
+    const existing = store.bios.find((item) => item.date === input.date);
+    const next: BioScan = {
+      id: input.id ?? existing?.id ?? crypto.randomUUID(),
+      date: input.date,
+      weightKg: input.weightKg,
+      fatPercent: input.fatPercent,
+      musclePercent: input.musclePercent,
+      visceralFat: input.visceralFat,
+    };
+    const bios = store.bios.filter((item) => item.date !== next.date);
+    bios.push(next);
+    bios.sort((a, b) => b.date.localeCompare(a.date));
+    return { ...store, bios };
+  });
+}
+
+export function deleteBio(id: string) {
+  update((store) => ({
+    ...store,
+    bios: store.bios.filter((item) => item.id !== id),
+  }));
+}
+
+export function setCycleWeek(week: string, on: boolean) {
+  update((store) => {
+    const cycleWeeks = store.cycleWeeks.filter((item) => item !== week);
+    if (on) cycleWeeks.push(week);
+    cycleWeeks.sort((a, b) => b.localeCompare(a));
+    return { ...store, cycleWeeks };
+  });
+}
+
 export function deleteWeekWeight(id: string) {
   update((store) => ({
     ...store,
@@ -451,6 +523,8 @@ export function resetStore() {
     localStorage.removeItem(HABITS_KEY);
     localStorage.removeItem(WEEKS_KEY);
     localStorage.removeItem(MONTHS_KEY);
+    localStorage.removeItem(BIOS_KEY);
+    localStorage.removeItem(CYCLE_KEY);
     void clearMonthPhotos();
   }
   emit();

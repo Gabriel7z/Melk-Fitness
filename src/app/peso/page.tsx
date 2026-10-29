@@ -16,6 +16,7 @@ import {
   closestHeight,
   HEIGHT_ROWS,
 } from "@/lib/body";
+import { FatScanCard } from "@/components/fat-scan-card";
 import { ScanCard } from "@/components/scan-card";
 import { BODY_SCAN, scanMatches } from "@/lib/scan";
 import { formatNumber, formatWeight } from "@/lib/format";
@@ -48,6 +49,11 @@ export default function PesoPage() {
       </PageHeader>
 
       {usingScan ? <ScanCard /> : null}
+      {usingScan ? (
+        <div className="mt-4">
+          <FatScanCard form={false} />
+        </div>
+      ) : null}
 
       {usingScan ? (
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">

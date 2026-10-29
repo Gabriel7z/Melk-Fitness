@@ -11,12 +11,12 @@ import {
   previousWeighIn,
   shiftDate,
 } from "@/lib/rhythm";
-import { deleteWeekWeight, saveWeekWeight, useStore } from "@/lib/store";
+import { deleteWeekWeight, saveWeekWeight, setCycleWeek, useStore } from "@/lib/store";
 import { useToday } from "@/lib/use-today";
 
 export function WeekWeightCard({ history = true }: { history?: boolean }) {
   const today = useToday();
-  const { weeks } = useStore();
+  const { weeks, cycleWeeks } = useStore();
   const week = today ? mondayOf(today) : "";
   const saved = weeks.find((item) => item.week === week);
   const [draft, setDraft] = useState<string | null>(null);
@@ -34,6 +34,7 @@ export function WeekWeightCard({ history = true }: { history?: boolean }) {
   const delta =
     saved && prior ? saved.weightKg - prior.weightKg : null;
   const monday = today.weekday === 1;
+  const cycleOn = cycleWeeks.includes(week);
 
   function save() {
     const weightKg = parseNumber(value);
@@ -97,11 +98,30 @@ export function WeekWeightCard({ history = true }: { history?: boolean }) {
           {error}
         </p>
       ) : null}
+      <button
+        type="button"
+        aria-pressed={cycleOn}
+        className={`mt-4 min-h-11 rounded-2xl px-4 text-left text-sm font-semibold ${
+          cycleOn
+            ? "bg-primary text-primary-foreground"
+            : "bg-secondary text-secondary-foreground"
+        }`}
+        onClick={() => setCycleWeek(week, !cycleOn)}
+      >
+        {cycleOn ? "Período marcado nesta semana" : "Estou no período"}
+      </button>
+      {cycleOn ? (
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Se a balança subir, pode ser água do período. Não corta comida por causa disso.
+        </p>
+      ) : null}
       {saved && delta != null ? (
         <p className="mt-3 text-sm text-muted-foreground">
           {delta === 0
             ? "Igual à semana passada."
-            : `${delta > 0 ? "Subiu" : "Desceu"} ${formatNumber(Math.abs(delta), 1)} kg desde ${formatLongDate(prior?.week ?? week)}.`}
+            : cycleOn && delta > 0
+              ? `Subiu ${formatNumber(delta, 1)} kg. Esta semana está no período, então esse número pode ser água, não gordura.`
+              : `${delta > 0 ? "Subiu" : "Desceu"} ${formatNumber(Math.abs(delta), 1)} kg desde ${formatLongDate(prior?.week ?? week)}.`}
         </p>
       ) : null}
       {saved ? (
@@ -121,7 +141,7 @@ function dayOnly(key: string) {
 }
 
 function WeekList() {
-  const { weeks } = useStore();
+  const { weeks, cycleWeeks } = useStore();
   const sorted = weeks.slice().sort((a, b) => b.week.localeCompare(a.week));
   if (sorted.length === 0) return null;
   return (
@@ -141,6 +161,7 @@ function WeekList() {
                 {delta != null
                   ? ` · ${delta > 0 ? "+" : "−"}${formatNumber(Math.abs(delta), 1)}`
                   : ""}
+                {cycleWeeks.includes(item.week) ? " · período" : ""}
               </span>
             </span>
             <button

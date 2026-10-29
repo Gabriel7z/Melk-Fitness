@@ -43,6 +43,15 @@ export type WeeklyWeighIn = {
   weightKg: number;
 };
 
+export type BioScan = {
+  id: string;
+  date: string;
+  weightKg: number;
+  fatPercent: number;
+  musclePercent: number | null;
+  visceralFat: number | null;
+};
+
 export type Energy = "cansada" | "normal" | "disposta";
 export type Hunger = "pouca" | "na medida" | "demais";
 
@@ -67,4 +76,7 @@ export type Store = {
   habits: Record<string, HabitDay>;
   weeks: WeeklyWeighIn[];
   months: MonthlyReview[];
+  bios: BioScan[];
+  /** Segundas marcadas como período, AAAA-MM-DD. */
+  cycleWeeks: string[];
 };

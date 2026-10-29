@@ -91,6 +91,7 @@ export function buildMonthReading(
   weeks: WeeklyWeighIn[],
   review: MonthlyReview | null,
   previous: MonthlyReview | null,
+  cycleWeeks: string[] = [],
 ) {
   const marks = weeksInMonth(weeks, month);
   const bits: string[] = [];
@@ -107,13 +108,16 @@ export function buildMonthReading(
     const first = marks[0]?.weightKg ?? 0;
     const last = marks[marks.length - 1]?.weightKg ?? 0;
     const delta = last - first;
+    const cycle = cycleWeeks.some((week) => monthOf(week) === month);
     if (delta < -0.8) {
       bits.push(
         `O peso desceu ${formatNumber(Math.abs(delta), 1)} kg entre a primeira e a última segunda. Descer mais que isso no mês pode levar o peito junto. Se a fita confirmar, sobe um pouco o arroz.`,
       );
     } else if (delta > 0.4) {
       bits.push(
-        `O peso subiu ${formatNumber(delta, 1)} kg no mês. Segura azeite e castanha e mantém a proteína.`,
+        cycle
+          ? `O peso subiu ${formatNumber(delta, 1)} kg no mês. Tem semana de período nessa conta, então a subida pode ser água. A fita e a próxima bio dizem se a gordura mudou.`
+          : `O peso subiu ${formatNumber(delta, 1)} kg no mês. Segura azeite e castanha e mantém a proteína.`,
       );
     } else {
       bits.push(

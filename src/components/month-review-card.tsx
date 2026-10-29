@@ -57,7 +57,7 @@ type Draft = {
 
 export function MonthReviewCard({ quiet = false }: { quiet?: boolean }) {
   const today = useToday();
-  const { weeks, months } = useStore();
+  const { weeks, months, cycleWeeks } = useStore();
   const due = today ? openMonth(today, months) : null;
   const [draft, setDraft] = useState<Draft | null>(null);
   const [error, setError] = useState("");
@@ -77,6 +77,7 @@ export function MonthReviewCard({ quiet = false }: { quiet?: boolean }) {
     weeks,
     saved ?? null,
     previousReview(months, selected),
+    cycleWeeks,
   );
 
   if (quiet && due == null) {
@@ -108,6 +109,7 @@ export function MonthReviewCard({ quiet = false }: { quiet?: boolean }) {
             weeks,
             latest,
             previousReview(months, latest.month),
+            cycleWeeks,
           )}
         </span>
       </Link>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PageHeader, SectionTitle } from "@/components/heading";
+import { FatScanCard } from "@/components/fat-scan-card";
 import { MonthReviewCard } from "@/components/month-review-card";
 import { ScanCard } from "@/components/scan-card";
 import { WeekWeightCard } from "@/components/week-weight-card";
@@ -100,7 +101,7 @@ export default function EvolucaoPage() {
           eyebrow="Evolução"
           title="A fita conta mais que a balança."
         >
-          O peso entra toda segunda, uma vez. No fim do mês, a fita e a foto de
+          O peso entra toda segunda, uma vez. A bio nova mostra se a gordura desceu. No fim do mês, a fita e a foto de
           frente e de lado, de manhã, na mesma luz.
         </PageHeader>
         <div className="h-40 animate-pulse rounded-3xl bg-card ring-1 ring-foreground/10" />
@@ -114,10 +115,13 @@ export default function EvolucaoPage() {
         eyebrow="Evolução"
         title="A fita conta mais que a balança."
       >
-        O peso entra toda segunda, uma vez. No fim do mês, a fita e a foto de
+        O peso entra toda segunda, uma vez. A bio nova mostra se a gordura desceu. No fim do mês, a fita e a foto de
         frente e de lado, de manhã, na mesma luz.
       </PageHeader>
       <WeekWeightCard />
+      <div className="mt-4">
+        <FatScanCard />
+      </div>
       <MonthReviewCard />
       <>
           {insight ? (

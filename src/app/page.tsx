@@ -19,12 +19,14 @@ import { ProfileForm } from "@/components/profile-form";
 import { WeekList, weekProgress } from "@/components/week-list";
 import { assess, proteinGrams, waterMl } from "@/lib/body";
 import { MonthReviewCard } from "@/components/month-review-card";
+import { FatScanCard } from "@/components/fat-scan-card";
 import { WeekWeightCard } from "@/components/week-weight-card";
 import { formatLongDate } from "@/lib/dates";
 import { firstName, formatNumber, formatWeight } from "@/lib/format";
 import { BODY_SCAN } from "@/lib/scan";
 import { setHabit, useStore } from "@/lib/store";
 import { useToday } from "@/lib/use-today";
+import { mondayOf } from "@/lib/rhythm";
 import { isWorkout, planForWeekday } from "@/lib/workouts";
 import { cn } from "cn";
 
@@ -70,7 +72,7 @@ const SCAN_CHIPS = [
 
 export default function HomePage() {
   const today = useToday();
-  const { profile, sessions, habits } = useStore();
+  const { profile, sessions, habits, cycleWeeks } = useStore();
   const plan = planForWeekday(today?.weekday ?? 1);
   const assessment = today && profile.heightCm ? assess(profile) : null;
   const progress = today ? weekProgress(sessions, today) : { main: 0, extra: false };
@@ -93,6 +95,7 @@ export default function HomePage() {
   const protein = assessment?.protein ?? proteinGrams(profile.weightKg);
   const water = assessment?.waterMl ?? waterMl(profile.weightKg);
   const waterLabel = formatNumber(water / 1000, 1);
+  const cycleOn = today ? cycleWeeks.includes(mondayOf(today)) : false;
 
   return (
     <div className="grid gap-6">
@@ -149,9 +152,11 @@ export default function HomePage() {
           label="Peso"
           value={formatWeight(profile.weightKg)}
           hint={
-            assessment
-              ? `Perder gordura, ${formatNumber(assessment.goalLow, 0)} a ${formatNumber(assessment.goalHigh, 0)} kg`
-              : "Peso de hoje"
+            cycleOn
+              ? "Período nesta semana. A balança pode subir de água."
+              : assessment
+                ? `Perder gordura, ${formatNumber(assessment.goalLow, 0)} a ${formatNumber(assessment.goalHigh, 0)} kg`
+                : "Peso de hoje"
           }
           tone="rose"
           delay="40ms"
@@ -184,6 +189,8 @@ export default function HomePage() {
           delay="160ms"
         />
       </section>
+
+      <FatScanCard form={false} />
 
       {!today ? (
         <div className="h-48 animate-pulse rounded-[2rem] bg-card" />
