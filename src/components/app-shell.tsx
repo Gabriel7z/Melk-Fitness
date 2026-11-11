@@ -7,6 +7,7 @@ import {
   House,
   Scale,
   TrendingUp,
+  UserRound,
   UtensilsCrossed,
 } from "lucide-react";
 import { cn } from "cn";
@@ -19,6 +20,7 @@ const NAV = [
   { href: "/prato", label: "Prato", icon: UtensilsCrossed },
   { href: "/peso", label: "Peso", icon: Scale },
   { href: "/evolucao", label: "Medidas", icon: TrendingUp },
+  { href: "/gabriel", label: "Gabriel", icon: UserRound },
 ];
 
 function isActive(href: string, path: string) {
@@ -114,7 +116,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur md:hidden"
         aria-label="Seções"
       >
-        <ul className="grid grid-cols-5 px-1 pt-1 pb-[max(0.4rem,env(safe-area-inset-bottom))]">
+        <ul className="grid grid-cols-6 px-1 pt-1 pb-[max(0.4rem,env(safe-area-inset-bottom))]">
           {NAV.map((item) => {
             const active = isActive(item.href, path);
             const Icon = item.icon;
@@ -123,7 +125,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-[12px] font-semibold",
+                    "flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1.5 text-[11px] leading-tight font-semibold",
                     active
                       ? "bg-secondary text-primary"
                       : "text-muted-foreground",
